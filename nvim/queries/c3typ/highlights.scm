@@ -1,0 +1,1 @@
+/Users/buckholz/tree-sitter-c3typ/queries/highlights.scm

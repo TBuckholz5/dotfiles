@@ -26,13 +26,14 @@ vim.opt.isfname:append '@-@'
 
 vim.opt.updatetime = 50
 
-vim.opt.colorcolumn = '80'
+vim.opt.colorcolumn = '120'
+vim.opt.conceallevel = 2
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -654,7 +655,29 @@ require('lazy').setup({
       }
     end,
   },
-
+  {
+    'mrcjkb/rustaceanvim',
+    version = '^6', -- Recommended
+    lazy = false, -- This plugin is already lazy
+    keys = {
+      {
+        '<leader>ca',
+        function()
+          vim.cmd.RustLsp 'codeAction'
+        end,
+        mode = '',
+        desc = 'Rust: [C]ode [A]ction',
+      },
+      {
+        '<leader>ch',
+        function()
+          vim.cmd.RustLsp { 'hover', 'actions' }
+        end,
+        mode = '',
+        desc = 'Rust: [C]ode [H]over',
+      },
+    },
+  },
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
@@ -874,6 +897,7 @@ require('lazy').setup({
         'query',
         'vim',
         'vimdoc',
+        'rust',
         'python',
         'typescript',
         'javascript',
@@ -930,7 +954,7 @@ require('lazy').setup({
     opts = {
       show_icons = true,
       leader_key = 'm',
-      buffer_leader_key = '.',
+      buffer_leader_key = ',',
     },
   },
   {
@@ -1008,6 +1032,42 @@ require('lazy').setup({
       { '<leader>gb', '<cmd>BlameToggle<cr>', desc = '[G]it [B]lame' },
     },
   },
+  {
+    'github/copilot.vim',
+  },
+  {
+    'pwntester/octo.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('octo').setup {
+        use_local_fs = true,
+        picker = 'telescope',
+      }
+    end,
+    keys = {
+      { '<leader>gh', '<cmd>Octo pr list<cr>', desc = '[G]itHub [H]ome' },
+      { '<leader>gpc', '<cmd>Octo pr create<cr>', desc = '[G]itHub [P]ull Request [C]reate' },
+      { '<leader>gph', '<cmd>Octo pr checkout<cr>', desc = '[G]itHub [P]ull Request Checkout' },
+      { '<leader>gpb', '<cmd>Octo pr browser<cr>', desc = '[G]itHub [P]ull Request Open in [B]rowser' },
+      { '<leader>gpdd', '<cmd>Octo pr diff<cr>', desc = '[G]itHub [P]ull Request [D]iff' },
+      { '<leader>gpdh', '<cmd>Octo pr changes<cr>', desc = '[G]itHub [P]ull Request [D]iff [Hunks]' },
+      { '<leader>gpr', '<cmd>Octo pr reload<cr>', desc = '[G]itHub [P]ull Request [R]eload' },
+    },
+  },
+  {
+    'petertriho/cmp-git',
+    dependencies = { 'hrsh7th/nvim-cmp' },
+    opts = {
+      -- options go here
+    },
+    init = function()
+      table.insert(require('cmp').get_config().sources, { name = 'git' })
+    end,
+  },
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -1055,6 +1115,19 @@ require('lazy').setup({
     },
   },
 })
+
+local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+parser_config.c3typ = {
+  install_info = {
+    url = '/Users/buckholz/tree-sitter-c3typ', -- Replace with your repo path
+    files = { 'src/parser.c' },
+    branch = 'main',
+    generate_requires_npm = false,
+    requires_generate_from_grammar = false,
+  },
+  filetype = 'c3typ',
+}
+vim.treesitter.language.register('markdown', 'octo')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
