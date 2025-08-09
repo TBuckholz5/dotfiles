@@ -968,9 +968,7 @@ require('lazy').setup({
     ---@module "neo-tree"
     ---@type neotree.Config?
     opts = {
-      window = {
-        position = 'current',
-      },
+      window = {},
       filesystem = {
         hijack_netrw_behavior = 'open_current',
       },
@@ -1036,37 +1034,18 @@ require('lazy').setup({
     'github/copilot.vim',
   },
   {
-    'pwntester/octo.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
-      'nvim-tree/nvim-web-devicons',
-    },
-    config = function()
-      require('octo').setup {
-        use_local_fs = true,
-        picker = 'telescope',
-      }
-    end,
+    'tpope/vim-fugitive',
     keys = {
-      { '<leader>gh', '<cmd>Octo pr list<cr>', desc = '[G]itHub [H]ome' },
-      { '<leader>gpc', '<cmd>Octo pr create<cr>', desc = '[G]itHub [P]ull Request [C]reate' },
-      { '<leader>gph', '<cmd>Octo pr checkout<cr>', desc = '[G]itHub [P]ull Request Checkout' },
-      { '<leader>gpb', '<cmd>Octo pr browser<cr>', desc = '[G]itHub [P]ull Request Open in [B]rowser' },
-      { '<leader>gpdd', '<cmd>Octo pr diff<cr>', desc = '[G]itHub [P]ull Request [D]iff' },
-      { '<leader>gpdh', '<cmd>Octo pr changes<cr>', desc = '[G]itHub [P]ull Request [D]iff [Hunks]' },
-      { '<leader>gpr', '<cmd>Octo pr reload<cr>', desc = '[G]itHub [P]ull Request [R]eload' },
+      { '<leader>gj', '<cmd>G<cr>', desc = 'Toggle [G]it Fugitive' },
+      { '<leader>gl', '<cmd>Git log --graph<cr>', desc = 'Toggle [G]it [L]og' },
     },
   },
   {
-    'petertriho/cmp-git',
-    dependencies = { 'hrsh7th/nvim-cmp' },
-    opts = {
-      -- options go here
-    },
-    init = function()
-      table.insert(require('cmp').get_config().sources, { name = 'git' })
-    end,
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    config = true,
+    -- use opts = {} for passing setup options
+    -- this is equivalent to setup({}) function
   },
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
