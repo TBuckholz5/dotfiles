@@ -3,6 +3,7 @@
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
+vim.opt.showtabline = 2
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
@@ -95,14 +96,6 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
---
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
@@ -111,6 +104,19 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Terminal
+vim.keymap.set('n', '<leader>tt', '<C-w>w', { desc = '[T]oggle [T]erminal Focus' })
+vim.keymap.set('t', '<leader>tt', '<C-\\><C-N><C-w>w', { desc = '[T]oggle [T]erminal Focus' })
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-N>', { desc = '[T]oggle [T]erminal Focus' })
+vim.keymap.set('n', '<leader>tn', '<cmd>sp | term<CR>', { desc = '[N]ew [T]erminal' })
+vim.keymap.set('t', '<leader>td', '<C-d>', { desc = '[D]elete [T]erminal' })
+
+-- Tabs
+vim.keymap.set('n', '<leader>cc', ':tabnew<CR>:tcd ', { desc = '[D]elete [T]erminal' })
+
+vim.keymap.set('n', '\'', ':<C-u>marks<CR>:normal! `', { desc = 'Show and Switch Marks' })
+
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
@@ -130,11 +136,6 @@ vim.keymap.set('n', '<leader>Y', [["+Y]])
 vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]])
 
 vim.keymap.set('n', 'Q', '<nop>')
-
-vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
-vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
-vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
-vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -945,19 +946,6 @@ require('lazy').setup({
     },
   },
   {
-    'otavioschwanck/arrow.nvim',
-    dependencies = {
-      { 'nvim-tree/nvim-web-devicons' },
-      -- or if using `mini.icons`
-      -- { "echasnovski/mini.icons" },
-    },
-    opts = {
-      show_icons = true,
-      leader_key = 'm',
-      buffer_leader_key = ',',
-    },
-  },
-  {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v3.x',
     dependencies = {
@@ -968,6 +956,7 @@ require('lazy').setup({
     ---@module "neo-tree"
     ---@type neotree.Config?
     opts = {
+      close_if_last_window = true,
       window = {},
       filesystem = {
         hijack_netrw_behavior = 'open_current',
@@ -1036,7 +1025,7 @@ require('lazy').setup({
   {
     'tpope/vim-fugitive',
     keys = {
-      { '<leader>gj', '<cmd>G<cr>', desc = 'Toggle [G]it Fugitive' },
+      { '<leader>gh', '<cmd>G<cr>', desc = 'Toggle [G]it Fugitive' },
       { '<leader>gl', '<cmd>Git log --graph<cr>', desc = 'Toggle [G]it [L]og' },
     },
   },

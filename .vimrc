@@ -20,6 +20,7 @@
 set nu
 set relativenumber
 
+set showtabline=2
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
@@ -77,6 +78,16 @@ set confirm
 
 " Remaps
 " --------------------------------------------
+
+"  Terminal
+nnoremap <leader>tt <C-w>w
+tnoremap <leader>tt <C-w>w
+nnoremap <leader>tn :term<CR>
+tnoremap <leader>td <C-d>
+
+" Tabs
+nnoremap <leader>cc :tabnew<CR>:tcd 
+
 nnoremap <Esc> :nohlsearch<CR>
 
 tnoremap <Esc><Esc> <C-\\><C-n>
@@ -138,8 +149,8 @@ let g:fuzzyy_keymaps = {
 
 " Grep
 set wildignore+=*/node_modules/*,*/target/*,*/tmp/*,*/vscode/*,*/vs-cache/*,*/fingerprints.txt,*/gen/*,*/jsconfig.json
-nnoremap <leader>ca :copen<CR>
-nnoremap <leader>cc :cclose<CR>
+nnoremap <leader>cn :copen<CR>
+nnoremap <leader>cd :cclose<CR>
 
 " Git
 " --------------------------------------------
