@@ -13,6 +13,8 @@
 " vim-fugitive
 " vim-highlightedyank
 " polyglot
+" devicons
+" gruvbox
 " Place in ~/.vim/pack/plugins/start
 
 " General Settings
@@ -42,10 +44,12 @@ set isfname+=@-@
 set updatetime=50
 
 set colorcolumn=120
-set background="dark"
+let g:gruvbox_contrast_dark = "hard"
+set background=dark
+colorscheme gruvbox
+
 
 syntax on
-colorscheme torte
 
 set conceallevel=2
 
@@ -171,6 +175,9 @@ let g:ale_python_black_options='--line-length=120'
 let g:ale_fix_on_save = 1
 let g:ale_completion_enabled = 1
 set completeopt=menuone,noselect
+autocmd ColorScheme * highlight link ALEVirtualTextError Error
+autocmd ColorScheme * highlight link ALEError SpellBad
+
 
 " vim-lsp
 nnoremap <leader>gi :LspInstallServer<CR>
