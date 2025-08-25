@@ -115,8 +115,6 @@ vim.keymap.set('t', '<leader>td', '<C-d>', { desc = '[D]elete [T]erminal' })
 -- Tabs
 vim.keymap.set('n', '<leader>cc', ':tabnew<CR>:tcd ', { desc = '[D]elete [T]erminal' })
 
-vim.keymap.set('n', '\'', ':<C-u>marks<CR>:normal! `', { desc = 'Show and Switch Marks' })
-
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
@@ -142,6 +140,8 @@ vim.keymap.set('n', 'Q', '<nop>')
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+vim.g.copilot_no_tab_map = true
+vim.keymap.set('i', '<S-Tab>', 'copilot#Accept("\\<S-Tab>")', { expr = true, replace_keycodes = false })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -216,6 +216,9 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+    },
+    keys = {
+      { '<leader>gb', '<cmd>Gitsigns blame<cr>', desc = '[G]it [B]lame' },
     },
   },
 
@@ -298,6 +301,7 @@ require('lazy').setup({
     event = 'VimEnter',
     dependencies = {
       'nvim-lua/plenary.nvim',
+      'debugloop/telescope-undo.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
 
@@ -352,6 +356,7 @@ require('lazy').setup({
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
+          undo = {},
         },
       }
 
@@ -380,6 +385,8 @@ require('lazy').setup({
           previewer = false,
         })
       end, { desc = '[/] Fuzzily search in current buffer' })
+      require('telescope').load_extension 'undo'
+      vim.keymap.set('n', '<leader>su', '<cmd>Telescope undo<cr>')
     end,
   },
 
@@ -713,9 +720,9 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         python = { 'black' },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
       },
       formatters = {
         black = {
@@ -830,23 +837,40 @@ require('lazy').setup({
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     'ellisonleao/gruvbox.nvim',
+    lazy = false,
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.o.background = "dark"
-      require("gruvbox").setup({
-          contrast = "hard"
-        })
+      vim.o.background = 'dark'
+      require('gruvbox').setup {
+        contrast = 'hard',
+      }
 
-      vim.cmd([[colorscheme gruvbox]])
-    end
+      vim.cmd [[colorscheme gruvbox]]
+    end,
   },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
+  {
+    'vimpostor/vim-tpipeline',
+  },
+
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons', 'ellisonleao/gruvbox.nvim' },
+    config = function()
+      require('lualine').setup {
+        options = {
+          theme = 'auto',
+          icons_enabled = vim.g.have_nerd_font,
+        },
+      }
+    end,
+  },
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
@@ -864,22 +888,6 @@ require('lazy').setup({
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
@@ -898,6 +906,7 @@ require('lazy').setup({
         'lua',
         'luadoc',
         'markdown',
+        'json',
         'markdown_inline',
         'query',
         'vim',
@@ -950,24 +959,21 @@ require('lazy').setup({
     },
   },
   {
-    'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v3.x',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'MunifTanjim/nui.nvim',
-    },
-    lazy = false, -- neo-tree will lazily load itself
-    ---@module "neo-tree"
-    ---@type neotree.Config?
-    opts = {
-      close_if_last_window = true,
-      window = {},
-      filesystem = {
-        hijack_netrw_behavior = 'open_current',
-      },
-    },
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- Optional dependencies
+    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
     keys = {
-      { '<leader>e', '<cmd>Neotree reveal<cr>', desc = 'NeoTree' },
+      {
+        '-',
+        '<cmd>Oil<cr>',
+        desc = 'Open parent directory',
+      },
     },
   },
   {
@@ -1001,12 +1007,6 @@ require('lazy').setup({
     },
   },
   {
-    'mbbill/undotree',
-    keys = {
-      { '<leader>u', vim.cmd.UndotreeToggle, desc = 'Toggle [U]ndo tree' },
-    },
-  },
-  {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
     config = true,
@@ -1014,20 +1014,24 @@ require('lazy').setup({
     -- this is equivalent to setup({}) function
   },
   {
-    'FabijanZulj/blame.nvim',
-    lazy = false,
-    config = function()
-      require('blame').setup {}
-    end,
-    keys = {
-      { '<leader>gb', '<cmd>BlameToggle<cr>', desc = '[G]it [B]lame' },
-    },
-  },
-  {
     'github/copilot.vim',
   },
   {
+    'CopilotC-Nvim/CopilotChat.nvim',
+    dependencies = {
+      { 'nvim-lua/plenary.nvim', branch = 'master' },
+    },
+    build = 'make tiktoken',
+    opts = {
+      -- See Configuration section for options
+    },
+    keys = {
+      { '<leader>en', '<cmd>CopilotChatOpen<cr>', desc = 'Open Copilot Chat' },
+    },
+  },
+  {
     'tpope/vim-fugitive',
+    lazy = false,
     keys = {
       { '<leader>gh', '<cmd>G<cr>', desc = 'Toggle [G]it Fugitive' },
       { '<leader>gl', '<cmd>Git log --graph<cr>', desc = 'Toggle [G]it [L]og' },
@@ -1039,6 +1043,87 @@ require('lazy').setup({
     config = true,
     -- use opts = {} for passing setup options
     -- this is equivalent to setup({}) function
+  },
+  {
+    'theprimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('harpoon'):setup()
+    end,
+    keys = {
+      {
+        '<leader>a',
+        function()
+          require('harpoon'):list():add()
+        end,
+        desc = 'harpoon file',
+      },
+      {
+        '<leader>m',
+        function()
+          local harpoon = require 'harpoon'
+          harpoon.ui:toggle_quick_menu(harpoon:list())
+        end,
+        desc = 'harpoon quick menu',
+      },
+      {
+        '<leader>1',
+        function()
+          require('harpoon'):list():select(1)
+        end,
+        desc = 'harpoon to file 1',
+      },
+      {
+        '<leader>2',
+        function()
+          require('harpoon'):list():select(2)
+        end,
+        desc = 'harpoon to file 2',
+      },
+      {
+        '<leader>3',
+        function()
+          require('harpoon'):list():select(3)
+        end,
+        desc = 'harpoon to file 3',
+      },
+      {
+        '<leader>4',
+        function()
+          require('harpoon'):list():select(4)
+        end,
+        desc = 'harpoon to file 4',
+      },
+      {
+        '<leader>5',
+        function()
+          require('harpoon'):list():select(5)
+        end,
+        desc = 'harpoon to file 5',
+      },
+      {
+        '<leader>6',
+        function()
+          require('harpoon'):list():select(6)
+        end,
+        desc = 'harpoon to file 6',
+      },
+      {
+        '<leader>7',
+        function()
+          require('harpoon'):list():select(7)
+        end,
+        desc = 'harpoon to file 7',
+      },
+      {
+        '<leader>8',
+        function()
+          require('harpoon'):list():select(8)
+        end,
+        desc = 'harpoon to file 8',
+      },
+    },
   },
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and

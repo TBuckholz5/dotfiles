@@ -43,6 +43,7 @@ set isfname+=@-@
 
 set updatetime=50
 
+set termguicolors
 set colorcolumn=120
 let g:gruvbox_contrast_dark = "hard"
 set background=dark
