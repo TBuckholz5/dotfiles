@@ -113,7 +113,12 @@ vim.keymap.set('n', '<leader>tn', '<cmd>sp | term<CR>', { desc = '[N]ew [T]ermin
 vim.keymap.set('t', '<leader>td', '<C-d>', { desc = '[D]elete [T]erminal' })
 
 -- Tabs
-vim.keymap.set('n', '<leader>cc', ':tabnew<CR>:tcd ', { desc = '[D]elete [T]erminal' })
+vim.keymap.set('n', '<leader>cc', ':tabnew<CR>:tcd ', { desc = 'New Tab' })
+vim.keymap.set('n', '<leader>cd', ':tabc<CR>', { desc = 'Delete Tab' })
+vim.keymap.set('n', '<C-1>', '1gt', { desc = 'Go to tab 1', noremap = true, silent = true })
+vim.keymap.set('n', '<C-2>', '2gt', { desc = 'Go to tab 2', noremap = true, silent = true })
+vim.keymap.set('n', '<C-3>', '3gt', { desc = 'Go to tab 3', noremap = true, silent = true })
+vim.keymap.set('n', '<C-4>', '4gt', { desc = 'Go to tab 4', noremap = true, silent = true })
 
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
@@ -208,6 +213,7 @@ require('lazy').setup({
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
+    lazy = false,
     opts = {
       signs = {
         add = { text = '+' },
@@ -343,6 +349,13 @@ require('lazy').setup({
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
       require('telescope').setup {
+        defaults = {
+          borderchars = {
+            prompt = { '─', ' ', ' ', ' ', '─', '─', ' ', ' ' },
+            results = { ' ' },
+            preview = { ' ' },
+          },
+        },
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
@@ -371,7 +384,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>s/', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+      -- vim.keymap.set('n', '<leader>s/', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
@@ -387,6 +400,56 @@ require('lazy').setup({
       end, { desc = '[/] Fuzzily search in current buffer' })
       require('telescope').load_extension 'undo'
       vim.keymap.set('n', '<leader>su', '<cmd>Telescope undo<cr>')
+
+      local pickers = require 'telescope.pickers'
+      local finders = require 'telescope.finders'
+      local make_entry = require 'telescope.make_entry'
+      local conf = require('telescope.config').values
+
+      local live_multigrep = function(opts)
+        opts = opts or {}
+        opts.cwd = opts.cwd or vim.uv.cwd()
+
+        local finder = finders.new_async_job {
+          command_generator = function(prompt)
+            if not prompt or prompt == '' then
+              return nil
+            end
+
+            local pieces = vim.split(prompt, '  ')
+            local args = { 'rg' }
+            if pieces[1] then
+              table.insert(args, '-e')
+              table.insert(args, pieces[1])
+            end
+
+            if pieces[2] then
+              table.insert(args, '-g')
+              table.insert(args, pieces[2])
+            end
+
+            ---@diagnostic disable-next-line: deprecated
+            return vim.tbl_flatten {
+              args,
+              { '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case' },
+            }
+          end,
+          entry_maker = make_entry.gen_from_vimgrep(opts),
+          cwd = opts.cwd,
+        }
+
+        pickers
+          .new(opts, {
+            debounce = 100,
+            prompt_title = 'Multi Grep',
+            finder = finder,
+            previewer = conf.grep_previewer(opts),
+            sorter = require('telescope.sorters').empty(),
+          })
+          :find()
+      end
+
+      vim.keymap.set('n', '<leader>s/', live_multigrep, { desc = '[S]earch by [G]rep' })
     end,
   },
 
@@ -410,8 +473,8 @@ require('lazy').setup({
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      { 'williamboman/mason.nvim', opts = {} },
-      'williamboman/mason-lspconfig.nvim',
+      { 'mason-org/mason.nvim', opts = {} },
+      'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -836,7 +899,7 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'ellisonleao/gruvbox.nvim',
+    'folke/tokyonight.nvim',
     lazy = false,
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
@@ -844,11 +907,8 @@ require('lazy').setup({
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       vim.o.background = 'dark'
-      require('gruvbox').setup {
-        contrast = 'hard',
-      }
 
-      vim.cmd [[colorscheme gruvbox]]
+      vim.cmd [[colorscheme tokyonight-night]]
     end,
   },
 
@@ -867,6 +927,14 @@ require('lazy').setup({
         options = {
           theme = 'auto',
           icons_enabled = vim.g.have_nerd_font,
+        },
+        tabline = {
+          lualine_a = {
+            {
+              'tabs',
+              mode = 2,
+            },
+          },
         },
       }
     end,
@@ -888,6 +956,25 @@ require('lazy').setup({
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
+      require('mini.diff').setup()
+      require('mini.notify').setup()
+      require('mini.files').setup {
+        mappings = {
+          go_in = '<CR>',
+          go_out = '<Esc>',
+        },
+        windows = {
+          preview = true,
+          width_preview = 70,
+        },
+      }
+      vim.keymap.set('n', '-', function()
+        local MiniFiles = require 'mini.files'
+        local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+        vim.schedule(function()
+          MiniFiles.reveal_cwd()
+        end)
+      end, { desc = 'Open [E]xplorer' })
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
@@ -938,42 +1025,81 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter-context',
   },
+  { -- Linting
+    'mfussenegger/nvim-lint',
+    event = { 'BufReadPre', 'BufNewFile' },
+    config = function()
+      local lint = require 'lint'
+      lint.linters_by_ft = {
+        markdown = { 'markdownlint' },
+        javascript = { 'eslint' },
+        typescript = { 'eslint' },
+        python = { 'pylint' },
+        lua = { 'luacheck' },
+        go = { 'golangcilint' },
+      }
+
+      local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
+      vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
+        group = lint_augroup,
+        callback = function()
+          -- Only run the linter in buffers that you can modify in order to
+          -- avoid superfluous noise, notably within the handy LSP pop-ups that
+          -- describe the hovered symbol using Markdown.
+          if vim.opt_local.modifiable:get() then
+            lint.try_lint()
+          end
+        end,
+      })
+    end,
+  },
   {
-    'kdheepak/lazygit.nvim',
-    -- lazy = true,
-    cmd = {
-      'LazyGit',
-      'LazyGitConfig',
-      'LazyGitCurrentFile',
-      'LazyGitFilter',
-      'LazyGitFilterCurrentFile',
+    'folke/snacks.nvim',
+    ---@type snacks.Config
+    opts = {
+      lazygit = {},
+      scratch = {},
     },
-    -- optional for floating window border decoration
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-    -- setting the keybinding for LazyGit with 'keys' is recommended in
-    -- order to load the plugin when the command is run for the first time
     keys = {
-      { '<leader>gg', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
+      {
+        '<leader>gg',
+        function()
+          require('snacks').lazygit.open()
+        end,
+        desc = 'LazyGit',
+      },
+      {
+        '<leader>ff',
+        function()
+          require('snacks').scratch()
+        end,
+        desc = 'Toggle Scratch Buffer',
+      },
+      {
+        '<leader>fs',
+        function()
+          require('snacks').scratch.select()
+        end,
+        desc = 'Select Scratch Buffer',
+      },
     },
   },
   {
-    'stevearc/oil.nvim',
-    ---@module 'oil'
-    ---@type oil.SetupOpts
-    opts = {},
-    -- Optional dependencies
-    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
-    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
-    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
-    lazy = false,
-    keys = {
-      {
-        '-',
-        '<cmd>Oil<cr>',
-        desc = 'Open parent directory',
+    'folke/flash.nvim',
+    event = 'VeryLazy',
+    ---@type Flash.Config
+    opts = {
+      modes = {
+        char = {
+          highlight = {
+            backdrop = false,
+          },
+        },
       },
+    },
+    -- stylua: ignore
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
     },
   },
   {
@@ -1014,7 +1140,10 @@ require('lazy').setup({
     -- this is equivalent to setup({}) function
   },
   {
-    'github/copilot.vim',
+    'zbirenbaum/copilot.lua',
+    cmd = 'Copilot',
+    event = 'InsertEnter',
+    config = true,
   },
   {
     'CopilotC-Nvim/CopilotChat.nvim',
@@ -1030,11 +1159,19 @@ require('lazy').setup({
     },
   },
   {
-    'tpope/vim-fugitive',
-    lazy = false,
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim', -- required
+      'sindrets/diffview.nvim', -- optional - Diff integration
+
+      -- Only one of these is needed.
+      'nvim-telescope/telescope.nvim', -- optional
+      'ibhagwan/fzf-lua', -- optional
+      'echasnovski/mini.pick', -- optional
+      'folke/snacks.nvim', -- optional
+    },
     keys = {
-      { '<leader>gh', '<cmd>G<cr>', desc = 'Toggle [G]it Fugitive' },
-      { '<leader>gl', '<cmd>Git log --graph<cr>', desc = 'Toggle [G]it [L]og' },
+      { '<leader>gh', '<cmd>Neogit<cr>', desc = 'Toggle Neo[G]it' },
     },
   },
   {
@@ -1050,6 +1187,22 @@ require('lazy').setup({
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('harpoon'):setup()
+      local harpoon = require 'harpoon'
+      harpoon:extend {
+        UI_CREATE = function(cx)
+          vim.keymap.set('n', '<C-v>', function()
+            harpoon.ui:select_menu_item { vsplit = true }
+          end, { buffer = cx.bufnr })
+
+          vim.keymap.set('n', '<C-x>', function()
+            harpoon.ui:select_menu_item { split = true }
+          end, { buffer = cx.bufnr })
+
+          vim.keymap.set('n', '<C-t>', function()
+            harpoon.ui:select_menu_item { tabedit = true }
+          end, { buffer = cx.bufnr })
+        end,
+      }
     end,
     keys = {
       {
@@ -1184,7 +1337,6 @@ parser_config.c3typ = {
   },
   filetype = 'c3typ',
 }
-vim.treesitter.language.register('markdown', 'octo')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
