@@ -1,0 +1,20 @@
+return {
+  'nvim-lualine/lualine.nvim',
+  dependencies = { 'nvim-tree/nvim-web-devicons', 'ellisonleao/gruvbox.nvim' },
+  config = function()
+    require('lualine').setup {
+      options = {
+        theme = 'auto',
+        icons_enabled = vim.g.have_nerd_font,
+      },
+      tabline = {
+        lualine_a = {
+          {
+            'tabs',
+            mode = 2,
+          },
+        },
+      },
+    }
+  end,
+}
