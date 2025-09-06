@@ -14,14 +14,14 @@ return {
       desc = 'LazyGit',
     },
     {
-      '<leader>ff',
+      '<leader>ef',
       function()
         require('snacks').scratch()
       end,
       desc = 'Toggle Scratch Buffer',
     },
     {
-      '<leader>fl',
+      '<leader>el',
       function()
         require('snacks').scratch.select()
       end,

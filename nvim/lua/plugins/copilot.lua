@@ -1,11 +1,6 @@
 return {
   {
-    'zbirenbaum/copilot.lua',
-    cmd = 'Copilot',
-    event = 'InsertEnter',
-    config = function()
-      require('copilot').setup {}
-    end,
+    'github/copilot.vim',
   },
   {
     'CopilotC-Nvim/CopilotChat.nvim',
@@ -19,5 +14,15 @@ return {
     keys = {
       { '<leader>en', '<cmd>CopilotChatOpen<cr>', desc = 'Open Copilot Chat' },
     },
+  },
+  {
+    'ravitemer/mcphub.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    build = 'npm install -g mcp-hub@latest', -- Installs `mcp-hub` node binary globally
+    config = function()
+      require('mcphub').setup()
+    end,
   },
 }
