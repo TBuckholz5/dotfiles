@@ -10,6 +10,7 @@ return { -- Linting
       python = { 'pylint' },
       lua = { 'luacheck' },
       go = { 'golangcilint' },
+      protobuf = { 'buf' },
     }
     require('lint').linters.luacheck = {
       cmd = 'luacheck',

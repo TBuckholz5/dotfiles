@@ -16,12 +16,6 @@ return { -- Collection of various small independent plugins/modules
     -- - sr)'  - [S]urround [R]eplace [)] [']
     require('mini.surround').setup()
     require('mini.diff').setup()
-    require('mini.jump2d').setup {
-      mappings = {
-        start_jumping = '<leader>f',
-      },
-    }
-    require('mini.jump').setup()
     require('mini.notify').setup()
     require('mini.files').setup {
       mappings = {
