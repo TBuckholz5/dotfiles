@@ -11,9 +11,11 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- Terminal
 vim.keymap.set('n', '<leader>tt', '<C-w>w', { desc = '[T]oggle [T]erminal Focus' })
 vim.keymap.set('t', '<leader>tt', '<C-\\><C-N><C-w>w', { desc = '[T]oggle [T]erminal Focus' })
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-N>', { desc = '[T]oggle [T]erminal Focus' })
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-N>', { desc = 'Leave Terminal Mode' })
 vim.keymap.set('n', '<leader>tn', '<cmd>sp | term<CR>', { desc = '[N]ew [T]erminal' })
 vim.keymap.set('t', '<leader>td', '<C-d>', { desc = '[D]elete [T]erminal' })
+vim.keymap.set('n', '<leader>tj', ':resize -10<CR>', { desc = 'Lower [T]erminal split height' })
+vim.keymap.set('n', '<leader>tk', ':resize +10<CR>', { desc = 'Raise [T]erminal split height' })
 
 -- Tabs
 vim.keymap.set('n', '<leader>cc', ':tabnew<CR>:tcd ', { desc = 'New Tab' })
@@ -23,6 +25,7 @@ vim.keymap.set('n', '<C-2>', '2gt', { desc = 'Go to tab 2', noremap = true, sile
 vim.keymap.set('n', '<C-3>', '3gt', { desc = 'Go to tab 3', noremap = true, silent = true })
 vim.keymap.set('n', '<C-4>', '4gt', { desc = 'Go to tab 4', noremap = true, silent = true })
 
+-- General
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
