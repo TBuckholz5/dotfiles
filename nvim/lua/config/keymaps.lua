@@ -9,8 +9,8 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- Terminal
-vim.keymap.set('n', '<leader>tt', '<C-w>w', { desc = '[T]oggle [T]erminal Focus' })
-vim.keymap.set('t', '<leader>tt', '<C-\\><C-N><C-w>w', { desc = '[T]oggle [T]erminal Focus' })
+-- vim.keymap.set('n', '<leader>tt', '<C-w>w', { desc = '[T]oggle [T]erminal Focus' })
+-- vim.keymap.set('t', '<leader>tt', '<C-\\><C-N><C-w>w', { desc = '[T]oggle [T]erminal Focus' })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-N>', { desc = 'Leave Terminal Mode' })
 vim.keymap.set('n', '<leader>tn', '<cmd>sp | term<CR>', { desc = '[N]ew [T]erminal' })
 vim.keymap.set('t', '<leader>td', '<C-d>', { desc = '[D]elete [T]erminal' })
