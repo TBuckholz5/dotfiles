@@ -25,6 +25,7 @@ return {
         },
       },
     }
+    require('fzf-lua').register_ui_select()
   end,
   keys = {
     { '<leader>sf', ':FzfLua files<CR>', desc = '[S]earch [F]iles' },
