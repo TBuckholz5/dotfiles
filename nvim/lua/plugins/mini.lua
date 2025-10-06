@@ -16,7 +16,6 @@ return { -- Collection of various small independent plugins/modules
     -- - sr)'  - [S]urround [R]eplace [)] [']
     require('mini.surround').setup()
     require('mini.diff').setup()
-    require('mini.statusline').setup()
     require('mini.notify').setup()
     require('mini.files').setup {
       mappings = {
