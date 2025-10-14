@@ -3,29 +3,21 @@ return {
   ---@type snacks.Config
   opts = {
     lazygit = {},
-    scratch = {},
   },
   keys = {
+    {
+      '<leader>bd',
+      function()
+        Snacks.bufdelete()
+      end,
+      desc = 'Delete Buffer',
+    },
     {
       '<leader>gg',
       function()
         require('snacks').lazygit.open()
       end,
       desc = 'LazyGit',
-    },
-    {
-      '<leader>ef',
-      function()
-        require('snacks').scratch()
-      end,
-      desc = 'Toggle Scratch Buffer',
-    },
-    {
-      '<leader>el',
-      function()
-        require('snacks').scratch.select()
-      end,
-      desc = 'Select Scratch Buffer',
     },
   },
 }
