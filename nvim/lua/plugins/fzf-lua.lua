@@ -12,8 +12,8 @@ return {
           ['ctrl-a'] = 'beginning-of-line',
           ['ctrl-e'] = 'end-of-line',
           ['alt-a'] = 'toggle-all',
-          ['ctrl-g'] = 'first',
-          ['ctrl-G'] = 'last',
+          ['alt-g'] = 'first',
+          ['alt-G'] = 'last',
         },
       },
       actions = {

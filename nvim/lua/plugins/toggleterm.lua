@@ -4,6 +4,13 @@ return {
     require('toggleterm').setup {}
   end,
   keys = {
-    { '<leader>tt', ':ToggleTerm direction=float<CR>', desc = '[T]oggle [T]erminal' },
+    {
+      '<leader>tt',
+      function()
+        require('toggleterm').toggle(nil, nil, nil, 'float', nil)
+      end,
+      mode = { 'n', 't' },
+      desc = '[T]oggle [T]erminal',
+    },
   },
 }
