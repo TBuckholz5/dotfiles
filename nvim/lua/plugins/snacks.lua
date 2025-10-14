@@ -1,5 +1,10 @@
 return {
   'folke/snacks.nvim',
+  config = function(_, opts)
+    require('snacks').setup(opts)
+
+    vim.api.nvim_set_hl(0, 'SnacksPickerDir', { link = 'text' })
+  end,
   ---@type snacks.Config
   opts = {
     lazygit = {},
@@ -25,7 +30,7 @@ return {
 
     -- Picker.
     {
-      '<leader>sR',
+      '<leader>sr',
       function()
         Snacks.picker.resume()
       end,

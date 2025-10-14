@@ -10,5 +10,6 @@ return { -- You can easily change to a different colorscheme.
     vim.o.background = 'dark'
 
     vim.cmd [[colorscheme ayu]]
+    vim.api.nvim_set_hl(0, 'LineNr', { fg = '#45474a', bold = true })
   end,
 }
