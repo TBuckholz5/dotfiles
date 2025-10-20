@@ -1,3 +1,10 @@
+vim.keymap.set('n', '<leader>dc', function()
+  local diag = vim.diagnostic.get(0, { lnum = vim.fn.line '.' - 1 })[1]
+  if diag then
+    vim.fn.setreg('+', diag.message)
+  end
+end, { desc = 'Copy current [D]iagnostic [C]ontent to clipboard' })
+
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
