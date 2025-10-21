@@ -48,7 +48,7 @@ return { -- Collection of various small independent plugins/modules
       vim.schedule(function()
         MiniFiles.reveal_cwd()
       end)
-    end, { desc = 'Open [E]xplorer' })
+    end, { desc = 'Open Explorer' })
     -- ... and there is more!
     --  Check out: https://github.com/echasnovski/mini.nvim
   end,

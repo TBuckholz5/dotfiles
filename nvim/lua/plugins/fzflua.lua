@@ -39,13 +39,13 @@ return {
     }
   end,
   keys = {
-    { '<leader>ff', ':FzfLua files<CR>', desc = '[S]earch [F]iles' },
-    { '<leader>fb', ':FzfLua buffers<CR>', desc = '[S]earch [B]uffers' },
+    { '<leader>ff', ':FzfLua files<CR>', desc = 'Search Files' },
+    { '<leader>fb', ':FzfLua buffers<CR>', desc = 'Search Buffers' },
     { '<leader>/', ':FzfLua blines<CR>', desc = 'Fuzzy Search Current Buffer' },
-    { '<leader>f/', ':FzfLua live_grep_native<CR>', desc = '[S]earch [L]ive Grep' },
-    { '<leader>fr', ':FzfLua resume<CR>', desc = '[S]earch [R]esume' },
-    { '<leader>fd', ':FzfLua diagnostics_workspace<CR>', desc = '[S]earch [D]iagnostics' },
-    { '<leader>fw', ':FzfLua grep_cword<CR>', desc = '[S]earch [C]urrent [W]ord' },
-    { '<leader>fk', ':FzfLua keymaps<CR>', desc = '[S]earch [K]eymaps' },
+    { '<leader>f/', ':FzfLua live_grep_native<CR>', desc = 'Search Live Grep' },
+    { '<leader>fr', ':FzfLua resume<CR>', desc = 'Search Resume' },
+    { '<leader>fd', ':FzfLua diagnostics_workspace<CR>', desc = 'Search Diagnostics' },
+    { '<leader>fw', ':FzfLua grep_cword<CR>', desc = 'Search Current Word' },
+    { '<leader>fk', ':FzfLua keymaps<CR>', desc = 'Search Keymaps' },
   },
 }
