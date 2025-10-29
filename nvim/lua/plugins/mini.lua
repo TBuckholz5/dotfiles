@@ -14,10 +14,6 @@ return { -- Collection of various small independent plugins/modules
     -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
     -- - sd'   - [S]urround [D]elete [']quotes
     -- - sr)'  - [S]urround [R]eplace [)] [']
-    require('mini.jump2d').setup {}
-    vim.keymap.set('n', 's', function()
-      require('mini.jump2d').start()
-    end, { desc = 'Jump2d' })
     require('mini.jump').setup {}
     require('mini.surround').setup {
 

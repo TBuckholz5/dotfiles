@@ -37,6 +37,7 @@ return {
         },
       },
     }
+    require('fzf-lua').register_ui_select()
   end,
   keys = {
     { '<leader>ff', ':FzfLua files<CR>', desc = 'Search Files' },
