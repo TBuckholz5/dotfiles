@@ -7,6 +7,12 @@ return {
   opts = {
     lazygit = {},
     notifier = {},
+    gh = {},
+    picker = {
+      sources = {
+        gh_pr = {},
+      },
+    },
     terminal = {
       win = {
         style = 'float',
@@ -21,6 +27,13 @@ return {
       end,
       desc = 'Toggle Terminal',
       mode = { 'n', 't' },
+    },
+    {
+      '<leader>gp',
+      function()
+        Snacks.picker.gh_pr()
+      end,
+      desc = 'GitHub Pull Requests (open)',
     },
 
     -- Picker.
