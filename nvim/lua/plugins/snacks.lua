@@ -5,7 +5,6 @@ return {
   end,
   ---@type snacks.Config
   opts = {
-    lazygit = {},
     notifier = {},
     gh = {},
     picker = {
@@ -20,14 +19,6 @@ return {
     },
   },
   keys = {
-    {
-      '<leader>tt',
-      function()
-        Snacks.terminal()
-      end,
-      desc = 'Toggle Terminal',
-      mode = { 'n', 't' },
-    },
     {
       '<leader>gp',
       function()
@@ -108,13 +99,6 @@ return {
         Snacks.bufdelete()
       end,
       desc = 'Delete Buffer',
-    },
-    {
-      '<leader>gg',
-      function()
-        require('snacks').lazygit.open()
-      end,
-      desc = 'LazyGit',
     },
   },
 }
