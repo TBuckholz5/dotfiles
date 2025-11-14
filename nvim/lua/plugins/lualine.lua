@@ -2,8 +2,25 @@ return {
   'nvim-lualine/lualine.nvim',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   config = function()
+    local function is_jj_repo(path)
+      local uv = vim.loop
+      path = path or uv.cwd()
+      while path do
+        local jj_dir = path .. '/.jj'
+        local stat = uv.fs_stat(jj_dir)
+        if stat and stat.type == 'directory' then
+          return true
+        end
+        local parent = path:match '(.+)/[^/]+$'
+        if parent == path then
+          break
+        end
+        path = parent
+      end
+      return false
+    end
     local function jj_branch()
-      if not vim.fn.executable 'jj' == 1 then
+      if not is_jj_repo() then
         return ''
       end
 
