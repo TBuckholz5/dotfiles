@@ -32,6 +32,7 @@ return { -- Collection of various small independent plugins/modules
       mappings = {
         go_in = '<CR>',
         go_out = '<Esc>',
+        close = '-',
       },
       windows = {
         preview = true,
