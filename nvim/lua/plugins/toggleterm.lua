@@ -13,7 +13,7 @@ return {
     end
     vim.api.nvim_set_keymap('n', '<leader>gg', '<cmd>lua _lazygit_toggle()<CR>', { noremap = true, silent = true })
 
-    local lazyjj = Terminal:new { cmd = 'lazyjj', hidden = true, close_on_exit = true, direction = 'float' }
+    local lazyjj = Terminal:new { cmd = 'jjui', hidden = true, close_on_exit = true, direction = 'float' }
 
     function _lazyjj_toggle()
       lazyjj:toggle()
