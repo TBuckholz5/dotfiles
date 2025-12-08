@@ -49,5 +49,6 @@ return {
     { '<leader>fd', ':FzfLua diagnostics_workspace<CR>', desc = 'Search Diagnostics' },
     { '<leader>fw', ':FzfLua grep_cword<CR>', desc = 'Search Current Word' },
     { '<leader>fk', ':FzfLua keymaps<CR>', desc = 'Search Keymaps' },
+    { '<leader>fu', ':FzfLua undotree<CR>', desc = 'Search undotree' },
   },
 }
