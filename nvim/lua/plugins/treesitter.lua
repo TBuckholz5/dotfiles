@@ -6,16 +6,6 @@ return {
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     config = function(_, opts)
       local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
-      parser_config.c3typ = {
-        install_info = {
-          url = '/Users/buckholz/tree-sitter-c3typ', -- Replace with your repo path
-          files = { 'src/parser.c' },
-          branch = 'main',
-          generate_requires_npm = false,
-          requires_generate_from_grammar = false,
-        },
-        filetype = 'c3typ',
-      }
       require('nvim-treesitter.configs').setup(opts)
     end,
     opts = {
@@ -25,6 +15,7 @@ return {
         'diff',
         'html',
         'lua',
+        'dart',
         'luadoc',
         'markdown',
         'json',
@@ -37,7 +28,6 @@ return {
         'typescript',
         'javascript',
         'go',
-        'c3typ',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
