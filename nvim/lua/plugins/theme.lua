@@ -9,6 +9,13 @@ return { -- You can easily change to a different colorscheme.
   config = function()
     vim.o.background = 'dark'
 
+    require('ayu').setup {
+      overrides = {
+        Normal = { bg = '#000000' },
+        NormalFloat = { bg = '#000000' },
+      },
+    }
+
     vim.cmd [[colorscheme ayu]]
     vim.api.nvim_set_hl(0, 'LineNr', { fg = '#45474a', bold = true })
   end,
