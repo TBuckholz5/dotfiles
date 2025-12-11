@@ -3,7 +3,14 @@ return {
   ---@module 'oil'
   ---@type oil.SetupOpts
   opts = {},
-  dependencies = { 'nvim-tree/nvim-web-devicons' }, -- use if you prefer nvim-web-devicons
+  config = function()
+    require('oil').setup {
+      keymaps = {
+        ['<Esc>'] = 'actions.parent',
+      },
+    }
+  end,
+  dependencies = { 'nvim-tree/nvim-web-devicons' },
   lazy = false,
   keys = {
     {
