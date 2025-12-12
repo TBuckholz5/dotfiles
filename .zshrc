@@ -6,6 +6,9 @@ plug "zap-zsh/zap-prompt"
 plug "zsh-users/zsh-syntax-highlighting"
 plug "rkh/zsh-jj"
 
+source <(COMPLETE=zsh jj)
+source <(fzf --zsh)
+
 # Load and initialise completion system
 autoload -Uz compinit
 compinit
@@ -33,8 +36,6 @@ alias python=python3
 cdf() {
     cd "$(fd -t d . ~ | sk)"
 }
-
-source <(COMPLETE=zsh jj)
 
 nvm use 22
 
