@@ -3,20 +3,15 @@ return { -- You can easily change to a different colorscheme.
   -- change the command in the config to whatever the name of that colorscheme is.
   --
   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  'Shatur/neovim-ayu',
+  'f4z3r/gruvbox-material.nvim',
   lazy = false,
   priority = 1000, -- Make sure to load this before all the other start plugins.
   config = function()
+    require('gruvbox-material').setup {
+      contrast = 'hard',
+    }
     vim.o.background = 'dark'
 
-    require('ayu').setup {
-      overrides = {
-        Normal = { bg = '#000000' },
-        NormalFloat = { bg = '#000000' },
-      },
-    }
-
-    vim.cmd [[colorscheme ayu]]
-    vim.api.nvim_set_hl(0, 'LineNr', { fg = '#45474a', bold = true })
+    vim.cmd [[colorscheme gruvbox-material]]
   end,
 }

@@ -11,6 +11,7 @@ return { -- Linting
       lua = { 'luacheck' },
       go = { 'golangcilint' },
       protobuf = { 'buf' },
+      rust = { 'clippy' },
     }
     require('lint').linters.luacheck = {
       cmd = 'luacheck',
