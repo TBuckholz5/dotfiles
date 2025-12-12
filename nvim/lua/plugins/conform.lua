@@ -37,6 +37,7 @@ return { -- Autoformat
       json = { 'prettierd', 'prettier', stop_after_first = true },
       go = { 'gofumpt' },
       protobuf = { 'buf' },
+      rust = { 'rustfmt' },
     },
     formatters = {
       black = {
