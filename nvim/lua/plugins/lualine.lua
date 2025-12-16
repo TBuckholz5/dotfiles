@@ -2,45 +2,51 @@ return {
   'nvim-lualine/lualine.nvim',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   config = function()
-    local function is_jj_repo(path)
-      local uv = vim.loop
-      path = path or uv.cwd()
-      while path do
-        local jj_dir = path .. '/.jj'
-        local stat = uv.fs_stat(jj_dir)
-        if stat and stat.type == 'directory' then
-          return true
-        end
-        local parent = path:match '(.+)/[^/]+$'
-        if parent == path then
-          break
-        end
-        path = parent
-      end
-      return false
-    end
-    local function jj_branch()
-      if not is_jj_repo() then
-        return ''
-      end
+    local jj_branch_cache = ''
 
-      for i = 0, 5 do
-        local rev = '@'
-        rev = rev .. string.rep('-', i)
-        local cmd = string.format("jj log --no-pager -r '%s' --no-graph --template 'self.bookmarks()'", rev)
-        local handle = io.popen(cmd)
-        if not handle then
-          return ''
-        end
-        local result = handle:read '*a'
-        handle:close()
-        result = result:gsub('%s+', '')
-        if result ~= '' then
-          return 'jj:' .. result
-        end
-      end
-      return ''
+    local function update_jj_branch()
+      vim.fn.jobstart({
+        'jj',
+        'log',
+        '--no-pager',
+        '-r',
+        '::@ & bookmarks()',
+        '--no-graph',
+        '-T',
+        'if(self.bookmarks(), self.bookmarks() ++ " ")',
+        '-n',
+        '6',
+      }, {
+        stdout_buffered = true,
+        on_stdout = function(_, data)
+          local result = table.concat(data or {}, ''):gsub('%s+', ' '):gsub('^%s+', ''):gsub('%s+$', '')
+          if result ~= '' then
+            jj_branch_cache = 'jj:' .. result
+          else
+            jj_branch_cache = ''
+          end
+          vim.cmd('redrawstatus')
+        end,
+        on_stderr = function() end,
+        on_exit = function(_, code)
+          if code ~= 0 then
+            jj_branch_cache = ''
+          end
+        end,
+      })
     end
+
+    local function jj_branch()
+      return jj_branch_cache
+    end
+
+    -- Update on events
+    vim.api.nvim_create_autocmd({ 'BufEnter', 'FocusGained', 'DirChanged' }, {
+      callback = update_jj_branch,
+    })
+
+    -- Initial update
+    update_jj_branch()
     require('lualine').setup {
       sections = {
         lualine_b = {
