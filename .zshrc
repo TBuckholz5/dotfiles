@@ -43,3 +43,14 @@ lint_files() {
     pre-commit run --files $(jj diff --name-only | tr '\n' ' ')
 }
 
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+export PATH="$PATH:$(go env GOPATH)/bin"
+
+export PATH="/Users/tbuckholz/.local/bin:$PATH"
+# alias python3="/opt/homebrew/bin/python3"
+# alias python="/opt/homebrew/bin/python3"
+# alias pip3="/opt/homebrew/bin/pip3"
+# alias pip="/opt/homebrew/bin/pip3"
+
+export PATH="$VIRTUAL_ENV/bin:$PATH"
