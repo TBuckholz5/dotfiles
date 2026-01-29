@@ -38,6 +38,8 @@ return { -- Autoformat
       go = { 'gofumpt' },
       protobuf = { 'buf' },
       rust = { 'rustfmt' },
+      zig = { 'zig fmt' },
+      scss = { 'prettierd', 'prettier', stop_after_first = true },
     },
     formatters = {
       black = {

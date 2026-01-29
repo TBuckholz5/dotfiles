@@ -15,7 +15,7 @@ return {
         '-T',
         'if(self.bookmarks(), self.bookmarks() ++ " ")',
         '-n',
-        '6',
+        '1',
       }, {
         stdout_buffered = true,
         on_stdout = function(_, data)
@@ -25,7 +25,7 @@ return {
           else
             jj_branch_cache = ''
           end
-          vim.cmd('redrawstatus')
+          vim.cmd 'redrawstatus'
         end,
         on_stderr = function() end,
         on_exit = function(_, code)
