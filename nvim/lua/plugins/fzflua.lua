@@ -46,6 +46,7 @@ return {
     { '<leader>f/', ':FzfLua live_grep_native<CR>', desc = 'Search Live Grep' },
     { '<leader>fr', ':FzfLua resume<CR>', desc = 'Search Resume' },
     { '<leader>fd', ':FzfLua diagnostics_workspace<CR>', desc = 'Search Diagnostics' },
+    { '<leader>fs', ':FzfLua lsp_document_symbols<CR>', desc = 'Search Document Symbols' },
     { '<leader>fw', ':FzfLua grep_cword<CR>', desc = 'Search Current Word' },
     { '<leader>fk', ':FzfLua keymaps<CR>', desc = 'Search Keymaps' },
     { '<leader>fu', ':FzfLua undotree<CR>', desc = 'Search undotree' },

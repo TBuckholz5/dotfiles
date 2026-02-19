@@ -2,6 +2,7 @@ return {
   'stevearc/oil.nvim',
   ---@module 'oil'
   ---@type oil.SetupOpts
+  enabled = false,
   opts = {},
   config = function()
     require('oil').setup {
