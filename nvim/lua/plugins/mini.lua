@@ -9,6 +9,25 @@ return { -- Collection of various small independent plugins/modules
     --  - ci'  - [C]hange [I]nside [']quote
     require('mini.ai').setup { n_lines = 500 }
 
+    require('mini.files').setup {
+      mappings = {
+        go_in = '<CR>',
+        go_out = '<Esc>',
+        close = '-',
+      },
+      windows = {
+        preview = true,
+        width_preview = 70,
+      },
+    }
+    vim.keymap.set('n', '-', function()
+      local MiniFiles = require 'mini.files'
+      local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+      vim.schedule(function()
+        MiniFiles.reveal_cwd()
+      end)
+    end, { desc = 'Open Explorer' })
+
     -- Add/delete/replace surroundings (brackets, quotes, etc.)
     --
     -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
