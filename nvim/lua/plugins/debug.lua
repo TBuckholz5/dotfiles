@@ -82,5 +82,28 @@ return {
     dap.listeners.before.event_exited['dapui_config'] = function()
       dapui.close()
     end
+
+    dap.adapters.go_remote = {
+      type = 'server',
+      host = '127.0.0.1',
+      port = 2345,
+    }
+
+    table.insert(dap.configurations.go, {
+      type = 'go_remote',
+      request = 'attach',
+      name = 'Attach remote',
+      mode = 'remote',
+      substitutePath = { {
+        from = '/Users/tbuckholz/bookshelf-app/server',
+        to = '/app',
+      } },
+      connect = function()
+        local host = vim.fn.input 'Host [127.0.0.1]: '
+        host = host ~= '' and host or '127.0.0.1'
+        local port = tonumber(vim.fn.input 'Port [2345]: ') or 2345
+        return { host = host, port = port }
+      end,
+    })
   end,
 }
