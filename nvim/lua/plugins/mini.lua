@@ -11,8 +11,6 @@ return { -- Collection of various small independent plugins/modules
 
     require('mini.files').setup {
       mappings = {
-        go_in = '<CR>',
-        go_out = '<Esc>',
         close = '-',
       },
       windows = {

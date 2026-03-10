@@ -5,7 +5,6 @@ return {
     require('fzf-lua').setup {
       fzf_colors = true,
       fzf_opts = {
-        ['--no-scrollbar'] = false,
         ['--cycle'] = true,
         ['--ansi'] = true,
         ['--height'] = '100%',
