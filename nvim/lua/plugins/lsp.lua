@@ -186,6 +186,15 @@ return {
     --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
     local capabilities = require('blink.cmp').get_lsp_capabilities()
 
+    -- Explicitly configure gopls so settings are applied regardless of how the server starts
+    vim.lsp.config('gopls', {
+      settings = {
+        gopls = {
+          buildFlags = { '-tags', 'integration' },
+        },
+      },
+    })
+
     -- Enable the following language servers
     --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
     --
@@ -197,7 +206,7 @@ return {
     --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
     local servers = {
       -- clangd = {},
-      -- gopls = {},
+      gopls = {},
       -- pyright = {},
       -- rust_analyzer = {},
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs

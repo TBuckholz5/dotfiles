@@ -13,6 +13,13 @@ return { -- Linting
       protobuf = { 'buf' },
       rust = { 'clippy' },
     }
+    require('lint').linters.golangcilint = vim.tbl_deep_extend('force', require('lint').linters.golangcilint, {
+      args = vim.list_extend(
+        vim.deepcopy(require('lint').linters.golangcilint.args),
+        { '--build-tags', 'integration' }
+      ),
+    })
+
     require('lint').linters.luacheck = {
       cmd = 'luacheck',
       args = {
