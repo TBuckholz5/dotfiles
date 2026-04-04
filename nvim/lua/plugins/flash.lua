@@ -12,4 +12,11 @@ return {
       desc = 'Flash',
     },
   },
+  opts = {
+    modes = {
+      char = {
+        enabled = false,
+      },
+    },
+  },
 }

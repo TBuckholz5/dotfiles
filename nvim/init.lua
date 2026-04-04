@@ -34,3 +34,13 @@ require('lazy').setup({
     },
   },
 })
+
+-- Prevent <Tab> moving your cursor randomly.
+vim.api.nvim_create_autocmd('ModeChanged', {
+  pattern = '*:n',
+  callback = function()
+    if require('luasnip').session.current_nodes[vim.api.nvim_get_current_buf()] then
+      require('luasnip').unlink_current()
+    end
+  end,
+})
