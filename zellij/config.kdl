@@ -1,0 +1,35 @@
+theme "gruvbox-dark"
+default_mode "locked"
+pane_frames false
+scroll_buffer_size 10000
+copy_command "pbcopy"
+copy_on_select false
+session_serialization true
+resurrect_sessions_on_startup true
+
+keybinds {
+    normal {
+        bind "Ctrl Space" { SwitchToMode "Locked"; }
+
+        // Single-letter mode switches (safe since Normal is intentional)
+        bind "p" { SwitchToMode "Pane"; }
+        bind "t" { SwitchToMode "Tab"; }
+        bind "r" { SwitchToMode "Resize"; }
+        bind "s" { SwitchToMode "Scroll"; }
+        bind "o" { SwitchToMode "Session"; }
+        unbind "Ctrl p" "Ctrl t" "Ctrl n" "Ctrl s" "Ctrl o"
+
+        // Unbind all Alt keys — AeroSpace owns Alt on this machine
+        unbind "Alt h" "Alt j" "Alt k" "Alt l"
+        unbind "Alt n" "Alt f" "Alt i" "Alt o"
+        unbind "Alt s" "Alt w" "Alt e" "Alt r"
+        unbind "Alt =" "Alt +" "Alt -"
+        unbind "Alt [" "Alt ]"
+        unbind "Alt 1" "Alt 2" "Alt 3" "Alt 4" "Alt 5"
+        unbind "Alt 6" "Alt 7" "Alt 8" "Alt 9" "Alt 0"
+    }
+    locked {
+        bind "Ctrl Space" { SwitchToMode "Normal"; }
+        unbind "Ctrl g"
+    }
+}
