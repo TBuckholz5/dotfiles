@@ -7,7 +7,7 @@ return { -- Linting
       markdown = { 'markdownlint' },
       javascript = { 'eslint' },
       typescript = { 'eslint' },
-      python = { 'pylint' },
+      python = { 'ruff' },
       lua = { 'luacheck' },
       go = { 'golangcilint' },
       protobuf = { 'buf' },
@@ -15,7 +15,7 @@ return { -- Linting
     }
     require('lint').linters.golangcilint = vim.tbl_deep_extend('force', require('lint').linters.golangcilint, {
       args = vim.list_extend(
-        vim.deepcopy(require('lint').linters.golangcilint.args),
+        vim.deepcopy(require('lint').linters.golangcilint.args or {}),
         { '--build-tags', 'integration' }
       ),
     })
@@ -37,7 +37,7 @@ return { -- Linting
         -- avoid superfluous noise, notably within the handy LSP pop-ups that
         -- describe the hovered symbol using Markdown.
         if vim.opt_local.modifiable:get() then
-          lint.try_lint()
+lint.try_lint()
         end
       end,
     })

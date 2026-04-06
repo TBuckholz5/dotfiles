@@ -18,11 +18,11 @@ keybinds {
         bind "s" { SwitchToMode "Scroll"; }
         bind "o" { SwitchToMode "Session"; }
 
-        bind "h" { Run "zellij" "action" "switch-session" "bookshelf-app"; SwitchToMode "Locked"; }
-        bind "j" { Run "zellij" "action" "switch-session" "jj-nvim";       SwitchToMode "Locked"; }
+        bind "h" { Run "zellij" "action" "switch-session" "chalk"; SwitchToMode "Locked"; }
+        bind "j" { Run "zellij" "action" "switch-session" "chalk-private";       SwitchToMode "Locked"; }
         bind "k" { Run "zellij" "action" "switch-session" "notes";         SwitchToMode "Locked"; }
         bind "l" { Run "zellij" "action" "switch-session" "dotfiles";      SwitchToMode "Locked"; }
-        bind ";" { Run "zellij" "action" "switch-session" "workouttracker"; SwitchToMode "Locked"; }
+        bind ";" { Run "zellij" "action" "switch-session" ""; SwitchToMode "Locked"; }
 
         bind "Ctrl f" {
             Run "zellij-sessionizer" { floating true; close_on_exit true; }

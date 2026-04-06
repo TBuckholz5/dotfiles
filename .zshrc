@@ -54,3 +54,21 @@ export PATH="/Users/tbuckholz/.local/bin:$PATH"
 # alias pip="/opt/homebrew/bin/pip3"
 
 export PATH="$VIRTUAL_ENV/bin:$PATH"
+
+source_dev_env_chalk() {
+    source /Users/trent/Development/chalk/chalk-private/development.env
+}
+
+chalklocal () {
+  (
+    set -e
+    pushd ~/Development/chalk/cli
+    GOOS=darwin GOARCH=arm64 go build -o chalk
+    popd
+    ~/Development/chalk/cli/chalk "$@"
+  )
+}
+
+export PATH="$HOME/.local/bin:$PATH"
+
+export VCPKG_ROOT="/Users/trent/vcpkg"

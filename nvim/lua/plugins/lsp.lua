@@ -207,7 +207,22 @@ return {
     local servers = {
       -- clangd = {},
       gopls = {},
-      -- pyright = {},
+      pyright = {
+        before_init = function(_, config)
+          local root = config.root_dir or vim.fn.getcwd()
+          local uv_venv = root .. '/.venv'
+          if vim.fn.isdirectory(uv_venv) == 1 then
+            config.settings.python.pythonPath = uv_venv .. '/bin/python'
+          elseif vim.env.VIRTUAL_ENV then
+            config.settings.python.pythonPath = vim.env.VIRTUAL_ENV .. '/bin/python'
+          else
+            config.settings.python.pythonPath = vim.fn.exepath 'python3'
+          end
+        end,
+        settings = {
+          python = {},
+        },
+      },
       -- rust_analyzer = {},
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
       --
@@ -250,6 +265,7 @@ return {
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
+      'pyright',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

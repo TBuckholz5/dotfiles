@@ -1,0 +1,265 @@
+-- Chalk run configurations (translated from IntelliJ)
+-- Requires: overseer.nvim (https://github.com/stevearc/overseer.nvim)
+--
+-- CUSTOMIZE: Set CHALK_ROOT and FRAUD_TEMPLATE_ROOT below before using.
+
+local CHALK_ROOT = vim.fn.expand '~/Development/chalk/chalk-private'
+local FRAUD_TEMPLATE_ROOT = vim.fn.expand '~/Development/chalk/fraud-template'
+
+-- venv python binaries
+local SERVER_PYTHON = CHALK_ROOT .. '/server/.venv/bin/python'
+local ENGINE_PYTHON = CHALK_ROOT .. '/engine/.venv/bin/python'
+
+local function p(...)
+  return table.concat({ CHALK_ROOT, ... }, '/')
+end
+
+-- :ChalkRunAll — starts all chalk services (analog to IntelliJ compound configuration)
+vim.api.nvim_create_user_command('ChalkRunAll', function()
+  local overseer = require 'overseer'
+  local services = {
+    'chalk: api-server',
+    'chalk: engine-query-server',
+    'chalk: grpc-engine-query-server',
+    'chalk: engine-branch-server',
+    'chalk: go-api-server',
+    'chalk: caddy',
+    'chalk: frontend',
+  }
+  for _, name in ipairs(services) do
+    overseer.run_template { name = name }
+  end
+end, {})
+
+return {
+  cache_key = function(_)
+    return 'chalk'
+  end,
+
+  generator = function(_, cb)
+    cb {
+      -- =======================================================================
+      -- Python: API Server
+      -- =======================================================================
+      {
+        name = 'chalk: api-server',
+        builder = function()
+          return {
+            cmd = { SERVER_PYTHON, '-m', 'server.app' },
+            cwd = p 'server',
+            env = {
+              PYTHONUNBUFFERED = '1',
+              DD_TRACE_ENABLED = 'false',
+              DEVELOPMENT_MODE = 'true',
+              DOPPLER_ENV = '1',
+              EXPORT_TRACES_TO_DATADOG = 'false',
+              GOOGLE_CLOUD_PROJECT = 'chalk-develop',
+              TZ = 'utc',
+            },
+          }
+        end,
+        tags = { 'chalk', 'python' },
+      },
+
+      -- =======================================================================
+      -- Python: Engine Query Server
+      -- =======================================================================
+      {
+        name = 'chalk: engine-query-server',
+        builder = function()
+          return {
+            cmd = { ENGINE_PYTHON, '-m', 'chalkengine.feature_server.app' },
+            cwd = p 'engine',
+            env = {
+              PYTHONUNBUFFERED = '1',
+              _CHALK_ACTIVE_ENVIRONMENT = 'ftlocal',
+              CHALK_DEPLOYMENT_ID = 'dev',
+              CHALK_PERSIST_QUERY_PLANS = 'true',
+              CHALK_PROJECT_ID = 'project',
+              CHALK_SKIP_RESULT_PERSISTENCE = '1',
+              CHALK_SKIP_USAGE_PERSISTENCE = 'true',
+              CHALK_TEAM_ID = 'team',
+              DD_TRACE_ENABLED = 'true',
+              EXPORT_TRACES_TO_DATADOG = 'false',
+              FEATURES_STORE_URI = 'postgresql+psycopg2://chalk:chalk@localhost:6543/postgres',
+              GCP_PROJECT_ID = 'chalk-develop',
+              GOOGLE_CLOUD_PROJECT = 'chalk-develop',
+              NEXT_AUTH_SECRET = 'vAfBgW56UYOSbQ7GTYK9GnecsPCP3fN2oNlB/MrYDGM=',
+              NO_JSON_LOGGING = '1',
+              PARQUET_DATASET_STORAGE_BUCKET = 'chalk_parquet_dataset_storage_bucket',
+              PARQUET_PLAN_STAGES_STORAGE_BUCKET = 'chalk_plan_stages_storage_bucket',
+              PORT = '8001',
+              REDIS_URI = 'redis://localhost:6379?password=6284001732',
+              TARGET_ROOT = FRAUD_TEMPLATE_ROOT,
+              TIMESCALE_URI = 'postgresql+psycopg2://chalk:chalk@localhost:6543/postgres',
+              TZ = 'utc',
+              ONLINE_STORE_KIND = 'REDIS_LIGHTNING',
+              REDIS_LIGHTNING_CLUSTER_URIS = '["redis://default:6284001732@localhost:6379"]',
+              REDIS_IS_CLUSTERED = '0',
+            },
+          }
+        end,
+        tags = { 'chalk', 'python' },
+      },
+
+      -- =======================================================================
+      -- Python: gRPC Engine Query Server
+      -- NOTE: libchalk or libchalk-stubs must be installed in the engine venv first
+      --       Set IGNORE_AUTH=1 to query directly with cURL/SDK
+      -- =======================================================================
+      {
+        name = 'chalk: grpc-engine-query-server',
+        builder = function()
+          return {
+            cmd = { ENGINE_PYTHON, '-m', 'chalkengine.grpc_query_server.entrypoint' },
+            cwd = p 'engine',
+            env = {
+              PYTHONUNBUFFERED = '1',
+              _CHALK_ACTIVE_ENVIRONMENT = 'ftlocal',
+              CHALK_DEPLOYMENT_ID = 'dev',
+              CHALK_FRONTEND_HOST = 'http://localhost:3000',
+              CHALK_PERSIST_QUERY_PLANS = 'true',
+              CHALK_PROJECT_ID = 'project',
+              CHALK_SKIP_RESULT_PERSISTENCE = '1',
+              CHALK_SKIP_USAGE_PERSISTENCE = 'true',
+              CHALK_TEAM_ID = 'team',
+              CHALK_SERVICE_KIND = 'engine-grpc',
+              DD_TRACE_ENABLED = 'true',
+              EXPORT_TRACES_TO_DATADOG = 'false',
+              FEATURES_STORE_URI = 'bigquery:///staging_features',
+              GCP_PROJECT_ID = 'chalk-develop',
+              GOOGLE_CLOUD_PROJECT = 'chalk-develop',
+              GRPC_QUERY_SERVER_NO_TLS = '1',
+              GRPC_QUERY_SERVER_PORT = '6666',
+              NEXT_AUTH_SECRET = 'vAfBgW56UYOSbQ7GTYK9GnecsPCP3fN2oNlB/MrYDGM=',
+              NO_JSON_LOGGING = '1',
+              ONLINE_STORE_KIND = 'REDIS_LIGHTNING',
+              PARQUET_DATASET_STORAGE_BUCKET = 'chalk_parquet_dataset_storage_bucket',
+              PARQUET_PLAN_STAGES_STORAGE_BUCKET = 'chalk_plan_stages_storage_bucket',
+              REDIS_IS_CLUSTERED = '0',
+              REDIS_LIGHTNING_CLUSTER_URIS = '["redis://default:6284001732@localhost:6379"]',
+              REDIS_URI = 'redis://localhost:6379?password=6284001732',
+              TARGET_ROOT = FRAUD_TEMPLATE_ROOT,
+              TIMESCALE_URI = 'postgresql+psycopg2://chalk:chalk@localhost:6543/postgres',
+              TZ = 'utc',
+              USE_BATCH_PLANNER_FOR_ONLINE_QUERY = 'true',
+              WEB_CONCURRENCY = '4',
+            },
+          }
+        end,
+        tags = { 'chalk', 'python' },
+      },
+
+      -- =======================================================================
+      -- Python: Engine Branch Server
+      -- =======================================================================
+      {
+        name = 'chalk: engine-branch-server',
+        builder = function()
+          return {
+            cmd = { ENGINE_PYTHON, '-m', 'chalkengine.branch_server.main' },
+            cwd = p 'engine',
+            env = {
+              PYTHONUNBUFFERED = '1',
+              _CHALK_ACTIVE_ENVIRONMENT = 'ftlocal',
+              BATCH_REPORT_TOPIC = 'local-metadata-server',
+              CHALK_PROJECT_ID = 'project',
+              CHALK_SKIP_RESULT_PERSISTENCE = 'true',
+              CHALK_SKIP_USAGE_PERSISTENCE = 'true',
+              CHALK_TEAM_ID = 'team',
+              DD_TRACE_ENABLED = 'false',
+              DOPPLER_ENV = '1',
+              EXPORT_TRACES_TO_DATADOG = 'false',
+              GOOGLE_CLOUD_PROJECT = 'chalk-develop',
+              IGNORE_AUTH = '0',
+              SOURCE_BUNDLE_BUCKET = 's3://chalk-develop-bundles',
+              TZ = 'utc',
+            },
+          }
+        end,
+        tags = { 'chalk', 'python' },
+      },
+
+      -- =======================================================================
+      -- Go: API Server
+      -- NOTE: Loads development.env via env_file — run `make remote.env` in
+      --       chalk-private root first if development.env doesn't exist.
+      -- =======================================================================
+      {
+        name = 'chalk: go-api-server',
+        builder = function()
+          local env = {
+            GOOGLE_CLOUD_PROJECT = 'chalk-prod',
+            DEVELOPMENT_MODE = 'true',
+          }
+          local dev_env_path = p 'development.env'
+          local f = io.open(dev_env_path, 'r')
+          if f then
+            for line in f:lines() do
+              local k, v = line:match '^([^#][^=]*)=(.*)$'
+              if k then
+                -- strip surrounding quotes ("value" or 'value')
+                v = v:match "^\"(.*)\"$" or v:match "^'(.*)'$" or v
+                env[k] = v
+              end
+            end
+            f:close()
+          else
+            vim.notify('chalk: development.env not found — run `make remote.env` in ' .. CHALK_ROOT, vim.log.levels.WARN)
+          end
+          return {
+            cmd = { 'go', 'run', p 'go-api-server/main.go' },
+            args = { 'grpc', '--host=127.0.0.1', '--port=8080', '--skip-secrets' },
+            cwd = p 'go-api-server',
+            env = env,
+          }
+        end,
+        tags = { 'chalk', 'go' },
+      },
+
+      -- =======================================================================
+      -- Caddy (proxy) — Install: brew install caddy
+      -- =======================================================================
+      {
+        name = 'chalk: caddy',
+        builder = function()
+          return {
+            cmd = { 'caddy' },
+            args = { 'run', 'Caddyfile' },
+            cwd = CHALK_ROOT,
+          }
+        end,
+        tags = { 'chalk' },
+      },
+
+      -- =======================================================================
+      -- Frontend — Run `yarn install` in chalk-private/frontend first
+      -- =======================================================================
+      {
+        name = 'chalk: frontend',
+        builder = function()
+          return {
+            cmd = { 'yarn' },
+            args = { 'dev' },
+            cwd = p 'frontend',
+          }
+        end,
+        tags = { 'chalk', 'frontend' },
+      },
+
+      -- =======================================================================
+      -- Remote: Local API Tunnel
+      -- =======================================================================
+      {
+        name = 'chalk: local-api-tunnel',
+        builder = function()
+          return {
+            cmd = { 'bash', p 'scripts/local_api_reverse_tunnel.sh' },
+            cwd = p 'scripts',
+          }
+        end,
+        tags = { 'chalk', 'remote' },
+      },
+    }
+  end,
+}
