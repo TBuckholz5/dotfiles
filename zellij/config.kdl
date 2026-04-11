@@ -17,6 +17,13 @@ keybinds {
         bind "r" { SwitchToMode "Resize"; }
         bind "s" { SwitchToMode "Scroll"; }
         bind "o" { SwitchToMode "Session"; }
+        bind "Ctrl f" {
+            Run "zellij-sessionizer" {
+                floating true;
+                close_on_exit true;
+            }
+            SwitchToMode "Locked";
+        }
         unbind "Ctrl p" "Ctrl t" "Ctrl n" "Ctrl s" "Ctrl o"
 
         // Unbind all Alt keys — AeroSpace owns Alt on this machine

@@ -23,3 +23,4 @@ link "$DOTFILES/.vimrc"          ~/.vimrc
 link "$DOTFILES/.aerospace.toml" ~/.aerospace.toml
 link "$DOTFILES/.zshrc"          ~/.zshrc
 link "$DOTFILES/zellij"          ~/.config/zellij
+link "$DOTFILES/bin/zellij-sessionizer" ~/.local/bin/zellij-sessionizer

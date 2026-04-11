@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Zellij sessionizer — pick a project dir, switch to or create a named session
+
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    selected=$(find ~/ -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
+fi
+
+[[ -z "$selected" ]] && exit 0
+
+session_name=$(basename "$selected" | tr . _)
+
+if zellij list-sessions 2>/dev/null | sed $'s/\033\[[0-9;]*m//g' | awk '{print $1}' | grep -qx "$session_name"; then
+    zellij action switch-session "$session_name" &>/dev/null
+else
+    # Spawn new session in background; unset ZELLIJ vars so zellij doesn't
+    # think it's already inside a session (which would block startup).
+    (cd "$selected" && ZELLIJ="" ZELLIJ_SESSION_NAME="" zellij --session "$session_name" &)
+
+    # Wait up to 3s for the session to appear, then switch to it
+    for _ in {1..30}; do
+        zellij list-sessions 2>/dev/null | awk '{print $1}' | grep -qx "$session_name" && break
+        sleep 0.1
+    done
+
+    zellij action switch-session "$session_name" &>/dev/null
+fi
