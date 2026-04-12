@@ -1,5 +1,6 @@
 theme "gruvbox-dark"
 default_mode "locked"
+default_layout "default"
 pane_frames false
 scroll_buffer_size 10000
 copy_command "pbcopy"
@@ -26,12 +27,7 @@ keybinds {
         }
         unbind "Ctrl p" "Ctrl t" "Ctrl n" "Ctrl s" "Ctrl o"
 
-        // Unbind all Alt keys — AeroSpace owns Alt on this machine
-        unbind "Alt h" "Alt j" "Alt k" "Alt l"
-        unbind "Alt n" "Alt f" "Alt i" "Alt o"
-        unbind "Alt s" "Alt w" "Alt e" "Alt r"
-        unbind "Alt =" "Alt +" "Alt -"
-        unbind "Alt [" "Alt ]"
+        // Unbind alt number keys to avoid conflicts with aerospace.
         unbind "Alt 1" "Alt 2" "Alt 3" "Alt 4" "Alt 5"
         unbind "Alt 6" "Alt 7" "Alt 8" "Alt 9" "Alt 0"
     }
