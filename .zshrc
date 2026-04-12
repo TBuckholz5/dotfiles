@@ -34,7 +34,7 @@ alias python=python3
 
 
 cdf() {
-    cd "$(fd -t d . ~ | sk)"
+    cd "$(fd -t d . ~ | fzf)"
 }
 
 nvm use 22
