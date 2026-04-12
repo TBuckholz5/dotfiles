@@ -12,42 +12,104 @@ keybinds {
     normal {
         bind "Ctrl Space" { SwitchToMode "Locked"; }
 
-        // Single-letter mode switches (safe since Normal is intentional)
         bind "p" { SwitchToMode "Pane"; }
         bind "t" { SwitchToMode "Tab"; }
         bind "r" { SwitchToMode "Resize"; }
         bind "s" { SwitchToMode "Scroll"; }
         bind "o" { SwitchToMode "Session"; }
 
-        // Session switching (mirrors tmux hjkl; bindings)
         bind "h" { Run "zellij" "action" "switch-session" "bookshelf-app"; SwitchToMode "Locked"; }
-        bind "j" { Run "zellij" "action" "switch-session" "jj-nvim"; SwitchToMode "Locked"; }
-        bind "k" { Run "zellij" "action" "switch-session" "notes"; SwitchToMode "Locked"; }
-        bind "l" { Run "zellij" "action" "switch-session" "dotfiles"; SwitchToMode "Locked"; }
+        bind "j" { Run "zellij" "action" "switch-session" "jj-nvim";       SwitchToMode "Locked"; }
+        bind "k" { Run "zellij" "action" "switch-session" "notes";         SwitchToMode "Locked"; }
+        bind "l" { Run "zellij" "action" "switch-session" "dotfiles";      SwitchToMode "Locked"; }
         bind ";" { Run "zellij" "action" "switch-session" "workouttracker"; SwitchToMode "Locked"; }
 
         bind "Ctrl f" {
-            Run "zellij-sessionizer" {
-                floating true;
-                close_on_exit true;
-            }
+            Run "zellij-sessionizer" { floating true; close_on_exit true; }
             SwitchToMode "Locked";
         }
         bind "f" {
-            Run "zellij-file-finder" {
-                floating true;
-                close_on_exit true;
-            }
+            Run "zellij-file-finder" { floating true; close_on_exit true; }
             SwitchToMode "Locked";
         }
         unbind "Ctrl p" "Ctrl t" "Ctrl n" "Ctrl s" "Ctrl o"
-
-        // Unbind alt number keys to avoid conflicts with aerospace.
         unbind "Alt 1" "Alt 2" "Alt 3" "Alt 4" "Alt 5"
         unbind "Alt 6" "Alt 7" "Alt 8" "Alt 9" "Alt 0"
     }
+
     locked {
         bind "Ctrl Space" { SwitchToMode "Normal"; }
         unbind "Ctrl g"
+    }
+
+    pane {
+        bind "Esc" "Enter" { SwitchToMode "Locked"; }
+
+        bind "h" "Left"  { MoveFocus "Left";  SwitchToMode "Locked"; }
+        bind "l" "Right" { MoveFocus "Right"; SwitchToMode "Locked"; }
+        bind "j" "Down"  { MoveFocus "Down";  SwitchToMode "Locked"; }
+        bind "k" "Up"    { MoveFocus "Up";    SwitchToMode "Locked"; }
+        bind "p"         { SwitchFocus;       SwitchToMode "Locked"; }
+
+        bind "n" { NewPane;                   SwitchToMode "Locked"; }
+        bind "d" { NewPane "Down";            SwitchToMode "Locked"; }
+        bind "r" { NewPane "Right";           SwitchToMode "Locked"; }
+        bind "x" { CloseFocus;                SwitchToMode "Locked"; }
+        bind "f" { ToggleFocusFullscreen;     SwitchToMode "Locked"; }
+        bind "z" { TogglePaneFrames;          SwitchToMode "Locked"; }
+        bind "w" { ToggleFloatingPanes;       SwitchToMode "Locked"; }
+        bind "e" { TogglePaneEmbedOrFloating; SwitchToMode "Locked"; }
+        bind "i" { TogglePanePinned;          SwitchToMode "Locked"; }
+
+        bind "c" { SwitchToMode "RenamePane"; }
+    }
+
+    renamepane {
+        bind "Enter" "Esc" { SwitchToMode "Locked"; }
+    }
+
+    tab {
+        bind "Esc" "Enter" { SwitchToMode "Locked"; }
+
+        bind "h" "Left" "Up" "k"    { GoToPreviousTab; SwitchToMode "Locked"; }
+        bind "l" "Right" "Down" "j" { GoToNextTab;     SwitchToMode "Locked"; }
+        bind "n"   { NewTab;              SwitchToMode "Locked"; }
+        bind "x"   { CloseTab;            SwitchToMode "Locked"; }
+        bind "s"   { ToggleActiveSyncTab; SwitchToMode "Locked"; }
+        bind "b"   { BreakPane;           SwitchToMode "Locked"; }
+        bind "]"   { BreakPaneRight;      SwitchToMode "Locked"; }
+        bind "["   { BreakPaneLeft;       SwitchToMode "Locked"; }
+        bind "Tab" { ToggleTab;           SwitchToMode "Locked"; }
+
+        bind "1" { GoToTab 1; SwitchToMode "Locked"; }
+        bind "2" { GoToTab 2; SwitchToMode "Locked"; }
+        bind "3" { GoToTab 3; SwitchToMode "Locked"; }
+        bind "4" { GoToTab 4; SwitchToMode "Locked"; }
+        bind "5" { GoToTab 5; SwitchToMode "Locked"; }
+        bind "6" { GoToTab 6; SwitchToMode "Locked"; }
+        bind "7" { GoToTab 7; SwitchToMode "Locked"; }
+        bind "8" { GoToTab 8; SwitchToMode "Locked"; }
+        bind "9" { GoToTab 9; SwitchToMode "Locked"; }
+
+        bind "r" { SwitchToMode "RenameTab"; }
+    }
+
+    renametab {
+        bind "Enter" "Esc" { SwitchToMode "Locked"; }
+    }
+
+    resize {
+        bind "Esc" "Enter" { SwitchToMode "Locked"; }
+        // All resize keys (h/j/k/l/H/J/K/L/=/+/-) left at default
+    }
+
+    scroll {
+        bind "Esc" "Enter" { SwitchToMode "Locked"; }
+        bind "Ctrl c"      { ScrollToBottom; SwitchToMode "Locked"; }
+        // All scroll keys left at default
+    }
+
+    session {
+        bind "Esc" "Enter" { SwitchToMode "Locked"; }
     }
 }
