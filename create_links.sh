@@ -72,5 +72,6 @@ link "$DOTFILES/.aerospace.toml" ~/.aerospace.toml
 link "$DOTFILES/.zshrc"          ~/.zshrc
 link "$DOTFILES/zellij"          ~/.config/zellij
 link "$DOTFILES/bin/zellij-sessionizer" ~/.local/bin/zellij-sessionizer
+link "$DOTFILES/bin/zellij-file-finder" ~/.local/bin/zellij-file-finder
 
 echo "Done."

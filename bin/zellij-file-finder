@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Zellij file finder — fuzzy find a file and open it in $EDITOR in a new pane
+
+if command -v fd &>/dev/null; then
+    file=$(fd --type f --hidden --follow --exclude .git 2>/dev/null \
+        | fzf --preview 'bat --color=always {} 2>/dev/null || cat {}')
+else
+    file=$(find . -type f -not -path '*/.git/*' 2>/dev/null \
+        | fzf --preview 'bat --color=always {} 2>/dev/null || cat {}')
+fi
+
+[[ -z "$file" ]] && exit 0
+
+zellij run --close-on-exit -- "${EDITOR:-nvim}" "$file"

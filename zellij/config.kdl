@@ -25,6 +25,13 @@ keybinds {
             }
             SwitchToMode "Locked";
         }
+        bind "f" {
+            Run "zellij-file-finder" {
+                floating true;
+                close_on_exit true;
+            }
+            SwitchToMode "Locked";
+        }
         unbind "Ctrl p" "Ctrl t" "Ctrl n" "Ctrl s" "Ctrl o"
 
         // Unbind alt number keys to avoid conflicts with aerospace.
