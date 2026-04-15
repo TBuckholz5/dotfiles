@@ -1,14 +1,9 @@
 return {
-  { -- Highlight, edit, and navigate code
+  {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.config', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    config = function(_, opts)
-      require('nvim-treesitter.config').setup(opts)
-    end,
-    opts = {
-      ensure_installed = {
+    config = function()
+      local languages = {
         'bash',
         'c',
         'diff',
@@ -27,26 +22,44 @@ return {
         'typescript',
         'javascript',
         'go',
-      },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+      }
+
+      -- Install any missing parsers
+      local isnt_installed = function(lang)
+        return #vim.api.nvim_get_runtime_file('parser/' .. lang .. '.*', false) == 0
+      end
+      local to_install = vim.tbl_filter(isnt_installed, languages)
+      if #to_install > 0 then
+        require('nvim-treesitter').install(to_install)
+      end
+
+      -- Collect filetypes for the language list
+      local filetypes = {}
+      for _, lang in ipairs(languages) do
+        for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang)) do
+          table.insert(filetypes, ft)
+        end
+      end
+
+      -- Enable treesitter highlighting via FileType autocmd (Neovim 0.12 approach)
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = filetypes,
+        callback = function(ev)
+          vim.treesitter.start(ev.buf)
+        end,
+        desc = 'Start tree-sitter highlighting',
+      })
+
+      -- Enable for any buffers already open at startup
+      for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        local ft = vim.bo[buf].filetype
+        if vim.list_contains(filetypes, ft) then
+          pcall(vim.treesitter.start, buf)
+        end
+      end
+    end,
   },
-  { -- Highlight, edit, and navigate code
+  {
     'nvim-treesitter/nvim-treesitter-context',
   },
 }

@@ -72,3 +72,5 @@ chalklocal () {
 export PATH="$HOME/.local/bin:$PATH"
 
 export VCPKG_ROOT="/Users/trent/vcpkg"
+
+ulimit -n 65536

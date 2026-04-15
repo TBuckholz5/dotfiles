@@ -18,11 +18,11 @@ keybinds {
         bind "s" { SwitchToMode "Scroll"; }
         bind "o" { SwitchToMode "Session"; }
 
-        bind "h" { Run "zellij" "action" "switch-session" "chalk"         { close_on_exit true; }; SwitchToMode "Locked"; }
-        bind "j" { Run "zellij" "action" "switch-session" "chalk-private" { close_on_exit true; }; SwitchToMode "Locked"; }
-        bind "k" { Run "zellij" "action" "switch-session" "notes"         { close_on_exit true; }; SwitchToMode "Locked"; }
-        bind "l" { Run "zellij" "action" "switch-session" "dotfiles"      { close_on_exit true; }; SwitchToMode "Locked"; }
-        bind ";" { Run "zellij" "action" "switch-session" ""              { close_on_exit true; }; SwitchToMode "Locked"; }
+        bind "h" { Run "bash" "-c" "zellij pipe --plugin file:$HOME/.config/zellij/plugins/zellij-switch.wasm -- '--session chalk'"         { close_on_exit true; }; SwitchToMode "Locked"; }
+        bind "j" { Run "bash" "-c" "zellij pipe --plugin file:$HOME/.config/zellij/plugins/zellij-switch.wasm -- '--session chalk-private'" { close_on_exit true; }; SwitchToMode "Locked"; }
+        bind "k" { Run "bash" "-c" "zellij pipe --plugin file:$HOME/.config/zellij/plugins/zellij-switch.wasm -- '--session notes'"         { close_on_exit true; }; SwitchToMode "Locked"; }
+        bind "l" { Run "bash" "-c" "zellij pipe --plugin file:$HOME/.config/zellij/plugins/zellij-switch.wasm -- '--session dotfiles'"      { close_on_exit true; }; SwitchToMode "Locked"; }
+        bind ";" { Run "bash" "-c" "zellij pipe --plugin file:$HOME/.config/zellij/plugins/zellij-switch.wasm -- '--session '"              { close_on_exit true; }; SwitchToMode "Locked"; }
 
         bind "Ctrl f" {
             Run "zellij-sessionizer" { floating true; close_on_exit true; }
