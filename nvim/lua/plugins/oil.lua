@@ -10,7 +10,7 @@ return {
         ['<C-v>'] = { 'actions.select', opts = { vertical = true } },
         ['<C-x>'] = { 'actions.select', opts = { horizontal = true } },
         ['<C-t>'] = { 'actions.select', opts = { tab = true } },
-        ['<C-p>'] = 'actions.preview',
+        ['<C-y>'] = 'actions.preview',
         ['<C-c>'] = { 'actions.close', mode = 'n' },
         ['<C-m>'] = 'actions.refresh',
         ['<C-h>'] = { 'actions.parent', mode = 'n' },
