@@ -1,4 +1,4 @@
-theme "gruvbox-dark"
+theme "tokyo-night-dark"
 default_mode "normal"
 default_layout "default"
 pane_frames false
@@ -55,7 +55,7 @@ keybinds {
 
         bind "h" "Left" "Up" "k"    { GoToPreviousTab; SwitchToMode "Normal"; }
         bind "l" "Right" "Down" "j" { GoToNextTab;     SwitchToMode "Normal"; }
-        bind "n"   { NewTab;              SwitchToMode "Normal"; }
+        bind "n"   { NewTab { layout "default"; }; SwitchToMode "Normal"; }
         bind "x"   { CloseTab;            SwitchToMode "Normal"; }
         bind "s"   { ToggleActiveSyncTab; SwitchToMode "Normal"; }
         bind "b"   { BreakPane;           SwitchToMode "Normal"; }

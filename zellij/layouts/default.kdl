@@ -4,61 +4,33 @@ layout {
         pane size=1 borderless=true {
             plugin location="https://github.com/dj95/zjstatus/releases/download/v0.22.0/zjstatus.wasm" {
 
-                // -- Gruvbox Dark mode
-                color_bg0 "#282828" //dark0
-                color_bg1 "#3c3836" //dark1
-                color_bg2 "#504945" //dark2
-                color_bg3 "#665c54" //dark3
-                color_bg4 "#7c6f64" //dark4
-                color_fg0 "#fbf1c7" //light0
-                color_fg1 "#ebdbb2" //light1
-                color_fg2 "#d5c4a1" //light2
-                color_fg3 "#bdae93" //light3
-                color_fg4 "#a89984" //light4
-                color_red "#fb4934" // bright_red
-                color_green "#b8bb26" //bright_green
-                color_yellow "#fabd2f" // bright_yellow
-                color_blue "#83a598" //bright_blue
-                color_purple "#d3869b" //bright_purple
-                color_aqua "#8ec07c" //bright_aqua
-                color_gray "#a89984" //bright_gray
-                color_orange "#fe8019" //bright_orange
-                color_neutral_red "#cc241d" //neutral_red
-                color_neutral_green "#98971a" //neutral_green
-                color_neutral_yellow "#d79921" //neutral_yellow
-                color_neutral_blue "#458588" //neutral_blue
-                color_neutral_purple "#b16286" //neutral_purple
-                color_neutral_aqua "#689d6a" //neutral_aqua
-                color_neutral_gray "#928374" //neutral_gray
-                color_neutral_orange "#d65d0e" //neatural_orange
-
-                // -- Gruvbox Light mode
-                //color_bg0 "#fbf1c7" //light0
-                //color_bg1 "#ebdbb2" //light1
-                //color_bg2 "#d5c4a1" //light2
-                //color_bg3 "#bdae93" //light3
-                //color_bg4 "#a89984" //light4
-                //color_fg0 "#282828" //dark0
-                //color_fg1 "#3c3836" //dark1
-                //color_fg2 "#504945" //dark2
-                //color_fg3 "#665c54" //dark3
-                //color_fg4 "#7c6f64" //dark4
-                //color_red "#9d0006" //faded_red
-                //color_green "#79740e" //faded_green
-                //color_yellow "#b57614" //faded_yellow
-                //color_blue "#076678" //faded_blue
-                //color_purple "#8f3f71" //faded_purple
-                //color_aqua "#427b58" //faded_aqua
-                //color_gray "#7c6f64" //faded_gray
-                //color_orange "#af3a03" //faded_orange
-                //color_neutral_red "#cc241d" //neutral_red
-                //color_neutral_green "#98971a" //neutral_green
-                //color_neutral_yellow "#d79921" //neutral_yellow
-                //color_neutral_blue "#458588" //neutral_blue
-                //color_neutral_purple "#b16286" //neutral_purple
-                //color_neutral_aqua "#689d6a" //neutral_aqua
-                //color_neutral_orange "#d65d0e" //neatural_orange
-                //color_neutral_gray "#928374" //neutral_gray
+                // -- Lake-Dweller Dark mode
+                color_bg0 "#0e0e16" //darkest background
+                color_bg1 "#13131c" //panel background
+                color_bg2 "#1a1a24" //slightly lighter
+                color_bg3 "#22222e" //selection/highlight
+                color_bg4 "#2a2a38" //lightest dark
+                color_fg0 "#d8d8d8" //lightest foreground
+                color_fg1 "#c0c0c8"
+                color_fg2 "#a8a8b4"
+                color_fg3 "#9090a0"
+                color_fg4 "#858d95" //muted slate
+                color_red "#ef8a90" //bright red
+                color_green "#8ac490" //soft green
+                color_yellow "#c4b080" //muted gold (derived)
+                color_blue "#b0c0e0" //pale blue
+                color_purple "#c0a8d0" //soft purple (derived)
+                color_aqua "#70a8a8" //muted cyan
+                color_gray "#858d95" //muted slate
+                color_orange "#c89870" //muted orange (derived)
+                color_neutral_red "#c86870"
+                color_neutral_green "#6aa478"
+                color_neutral_yellow "#a49060"
+                color_neutral_blue "#8090c0"
+                color_neutral_purple "#9880b0"
+                color_neutral_aqua "#508898"
+                color_neutral_gray "#606870"
+                color_neutral_orange "#a07850"
 
                 format_left   "#[bg=$bg2,fg=$fg3] {session} {mode}#[bg=$bg1]{tabs}"
                 format_center "{notifications}"
