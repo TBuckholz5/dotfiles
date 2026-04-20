@@ -1,11 +1,11 @@
 return {
-  'yonatanperel/lake-dweller.nvim',
+  'catppuccin/nvim',
   lazy = false,
   priority = 1000,
   config = function()
-    require('lake-dweller').setup {
-      variant = 'ocean-dweller',
+    require('catppuccin').setup {
+      flavour = 'mocha',
     }
-    vim.cmd.colorscheme 'lake-dweller'
+    vim.cmd.colorscheme 'catppuccin'
   end,
 }

@@ -39,7 +39,7 @@ return { -- Autoformat
       protobuf = { 'buf' },
       rust = { 'rustfmt' },
       java = { 'google_java_format' },
-      markdown = { 'markdown_toc' },
+      markdown = { 'mdformat', 'markdown_toc' },
     },
     formatters = {
       black = {
