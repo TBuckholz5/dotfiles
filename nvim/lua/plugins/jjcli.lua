@@ -1,8 +1,15 @@
 return {
   'nicolasgb/jj.nvim',
   version = '*',
+  lazy = false,
   config = function()
-    require('jj').setup {}
+    require('jj').setup {
+      terminal = {
+        window = {
+          type = 'hsplit',
+        },
+      },
+    }
   end,
   keys = {
     { '<leader>js', '<cmd>J log<cr>', desc = '[J]j [S]tatus' },
