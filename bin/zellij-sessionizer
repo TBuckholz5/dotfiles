@@ -4,7 +4,7 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/ ~/Development/chalk/ -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
+    selected=$(find ~/ ~/Development/chalk/ ~/Development/chalk/customer/ -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
 fi
 
 [[ -z "$selected" ]] && exit 0

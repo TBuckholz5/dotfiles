@@ -1,4 +1,5 @@
 theme "gruvbox-dark"
+default_shell "/opt/homebrew/bin/fish"
 default_mode "normal"
 default_layout "default"
 pane_frames false

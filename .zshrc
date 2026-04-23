@@ -74,3 +74,6 @@ export PATH="$HOME/.local/bin:$PATH"
 export VCPKG_ROOT="/Users/trent/vcpkg"
 
 ulimit -n 65536
+export CHALK_INSTALL="/Users/trent/.chalk"
+export PATH="$CHALK_INSTALL/bin:$PATH"
+export PATH="$HOME/Development/chalk/cli:$PATH"
