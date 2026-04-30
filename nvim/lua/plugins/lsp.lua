@@ -73,7 +73,27 @@ return {
 
         -- Jump to the implementation of the word under your cursor.
         --  Useful when your language has ways of declaring types without an actual implementation.
+        --  NOTE: LSP "implementation" finds virtual-method overrides; for header→.cpp jumps in
+        --  C/C++ use `grd` (definition) or `<leader>ch` (clangd switchSourceHeader, below).
         map('gri', require('fzf-lua').lsp_implementations, 'Goto Implementation')
+
+        -- C/C++: toggle between the current file and its header/source counterpart via clangd.
+        if client and client.name == 'clangd' then
+          map('<leader>ch', function()
+            local params = vim.lsp.util.make_text_document_params(event.buf)
+            client:request('textDocument/switchSourceHeader', params, function(err, result)
+              if err then
+                vim.notify('switchSourceHeader: ' .. tostring(err), vim.log.levels.ERROR)
+                return
+              end
+              if not result then
+                vim.notify('No alternate source/header file found', vim.log.levels.WARN)
+                return
+              end
+              vim.cmd.edit(vim.uri_to_fname(result))
+            end, event.buf)
+          end, 'Switch source/header (clangd)')
+        end
 
         -- Jump to the definition of the word under your cursor.
         --  This is where a variable was first declared, or where a function is defined, etc.

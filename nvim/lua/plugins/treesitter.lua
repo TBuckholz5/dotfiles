@@ -2,10 +2,14 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
+    -- Load before any buffer is read so the FileType autocmd below is registered
+    -- in time for the first file opened in a session.
+    event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local languages = {
         'bash',
         'c',
+        'cpp',
         'diff',
         'html',
         'lua',
@@ -20,6 +24,7 @@ return {
         'rust',
         'python',
         'typescript',
+        'tsx',
         'javascript',
         'go',
       }

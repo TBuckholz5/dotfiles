@@ -77,3 +77,10 @@ ulimit -n 65536
 export CHALK_INSTALL="/Users/trent/.chalk"
 export PATH="$CHALK_INSTALL/bin:$PATH"
 export PATH="$HOME/Development/chalk/cli:$PATH"
+
+# bun completions
+[ -s "/Users/trent/.bun/_bun" ] && source "/Users/trent/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
