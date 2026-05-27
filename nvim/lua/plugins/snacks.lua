@@ -14,6 +14,16 @@ return {
       },
     },
     lazygit = { enabled = true },
+    image = {
+      enabled = true,
+      doc = {
+        -- render inline images in markdown / other docs
+        enabled = true,
+        inline = true,
+        -- also show a floating preview on hover
+        float = true,
+      },
+    },
   },
 
   keys = {

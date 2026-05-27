@@ -1,5 +1,11 @@
 theme "gruvbox-dark"
 default_shell "/opt/homebrew/bin/fish"
+// Kitty keyboard protocol must be ON for the Ctrl+/ . \ mode-entry binds
+// below to register (legacy encoding collapses Ctrl+/ -> Ctrl+_ etc.).
+// It was previously disabled because KKP + Zellij 0.44.0/0.44.1 broke
+// scroll-mode scrolling for apps that request KKP (e.g. Claude Code TUI);
+// 0.44.2 (KKP fixes) + 0.44.3 (scroll fixes) should address that.
+support_kitty_keyboard_protocol true
 default_mode "normal"
 default_layout "default"
 pane_frames false

@@ -1,6 +1,7 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
     build = ':TSUpdate',
     -- Load before any buffer is read so the FileType autocmd below is registered
     -- in time for the first file opened in a session.
