@@ -27,5 +27,21 @@ return { -- Collection of various small independent plugins/modules
       },
     }
     require('mini.diff').setup()
+    require('mini.files').setup {
+      mappings = {
+        close = '-',
+      },
+      windows = {
+        preview = true,
+        width_preview = 70,
+      },
+    }
+    vim.keymap.set('n', '-', function()
+      local MiniFiles = require 'mini.files'
+      local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+      vim.schedule(function()
+        MiniFiles.reveal_cwd()
+      end)
+    end, { desc = 'Open Explorer' })
   end,
 }
