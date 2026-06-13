@@ -26,6 +26,7 @@ return {
   end,
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   lazy = false,
+  enabled = false,
   keys = {
     {
       '-',
