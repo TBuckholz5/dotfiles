@@ -1,11 +1,14 @@
 theme "gruvbox-dark"
 default_shell "/opt/homebrew/bin/fish"
-// Kitty keyboard protocol must be ON for the Ctrl+/ . \ mode-entry binds
-// below to register (legacy encoding collapses Ctrl+/ -> Ctrl+_ etc.).
-// It was previously disabled because KKP + Zellij 0.44.0/0.44.1 broke
-// scroll-mode scrolling for apps that request KKP (e.g. Claude Code TUI);
-// 0.44.2 (KKP fixes) + 0.44.3 (scroll fixes) should address that.
-support_kitty_keyboard_protocol true
+// Kitty keyboard protocol stays OFF. With it ON under Zellij 0.44.3 it
+// caused scroll-edit panes (Ctrl+s e) to shake endlessly and made fish
+// vi-mode keystrokes lag/leak (ESC mode-switch mis-timing). The earlier
+// bet that 0.44.2/0.44.3 fixed KKP+scroll-mode didn't hold for the
+// edit-pane case. Mode-entry binds below therefore use Alt+Shift (which
+// legacy-encodes fine) instead of Ctrl+/ . \. Ghostty maps the left Option
+// key to Alt (macos-option-as-alt = left) so those binds register, and
+// Alt+Shift avoids AeroSpace, which already owns plain alt-s / alt-r.
+support_kitty_keyboard_protocol false
 default_mode "normal"
 default_layout "default"
 pane_frames false
@@ -17,14 +20,17 @@ resurrect_sessions_on_startup true
 
 keybinds {
     normal {
-        // Remap three default mode-entry keys that conflict with nvim:
-        //   ctrl+h -> nvim window-left  =>  ctrl+/
-        //   ctrl+o -> vim jumplist-back =>  ctrl+.
-        //   ctrl+n -> vim completion↑   =>  ctrl+\
+        // ctrl+h/o/n stay unbound so nvim keeps window-left / jumplist /
+        // completion. Mode-entry moved to Alt+Shift (Ctrl+/ . \ needed KKP,
+        // now off — see support_kitty_keyboard_protocol note above). Plain
+        // alt-s / alt-r are taken by AeroSpace, so Shift keeps the mnemonics:
+        //   Move    => alt+shift+m
+        //   Session => alt+shift+s
+        //   Resize  => alt+shift+r
         unbind "Ctrl h" "Ctrl o" "Ctrl n"
-        bind "Ctrl /"  { SwitchToMode "Move"; }
-        bind "Ctrl ."  { SwitchToMode "Session"; }
-        bind "Ctrl \\" { SwitchToMode "Resize"; }
+        bind "Alt Shift m" { SwitchToMode "Move"; }
+        bind "Alt Shift s" { SwitchToMode "Session"; }
+        bind "Alt Shift r" { SwitchToMode "Resize"; }
 
         bind "Ctrl Space" {
             Run "zellij-sessionizer" { floating true; close_on_exit true; }

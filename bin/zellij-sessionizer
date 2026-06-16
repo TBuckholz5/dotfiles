@@ -20,7 +20,7 @@ else
 
     # Wait up to 3s for the session to appear, then switch to it
     for _ in {1..30}; do
-        zellij list-sessions 2>/dev/null | awk '{print $1}' | grep -qx "$session_name" && break
+        zellij list-sessions 2>/dev/null | sed $'s/\033\[[0-9;]*m//g' | awk '{print $1}' | grep -qx "$session_name" && break
         sleep 0.1
     done
 
