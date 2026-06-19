@@ -34,6 +34,9 @@ vim.keymap.set('n', '<C-2>', '2gt', { desc = 'Go to tab 2', noremap = true, sile
 vim.keymap.set('n', '<C-3>', '3gt', { desc = 'Go to tab 3', noremap = true, silent = true })
 vim.keymap.set('n', '<C-4>', '4gt', { desc = 'Go to tab 4', noremap = true, silent = true })
 
+-- Folding
+vim.keymap.set('n', '<leader>z', 'za', { desc = 'Toggle fold under cursor' })
+
 -- General
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")

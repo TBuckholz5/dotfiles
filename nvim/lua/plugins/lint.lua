@@ -20,14 +20,15 @@ return { -- Linting
       ),
     })
 
-    require('lint').linters.luacheck = {
-      cmd = 'luacheck',
-      args = {
-        '--globals',
-        'vim', -- Add 'vim' to the list of recognized globals
-        '--',
-      },
-    }
+    -- Add 'vim' to luacheck's recognized globals while preserving the
+    -- built-in parser/stdin/args (overwriting the whole table drops the
+    -- parser, which crashes nvim-lint).
+    require('lint').linters.luacheck = vim.tbl_deep_extend('force', require('lint').linters.luacheck, {
+      args = vim.list_extend(
+        { '--globals', 'vim' },
+        vim.deepcopy(require('lint').linters.luacheck.args or {})
+      ),
+    })
 
     local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
     vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
