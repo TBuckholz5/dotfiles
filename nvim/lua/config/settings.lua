@@ -28,6 +28,15 @@ vim.opt.updatetime = 50
 vim.opt.colorcolumn = '80'
 vim.opt.conceallevel = 2
 
+-- Treesitter-based folding (Neovim native; falls back cleanly on buffers
+-- with no parser). Start with everything unfolded.
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldtext = ''
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true
+
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
