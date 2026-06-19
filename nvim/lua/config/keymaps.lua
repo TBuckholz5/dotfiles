@@ -56,8 +56,6 @@ vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]])
 
 vim.keymap.set('n', 'Q', '<nop>')
 
-vim.keymap.set('i', '<S-Tab>', 'copilot#Accept("\\<S-Tab>")', { expr = true, replace_keycodes = false })
-
 vim.keymap.set('i', '<C-S-n>', '<C-p>', { desc = 'Previous completion' })
 
 vim.keymap.set('n', '<leader>lt', function()

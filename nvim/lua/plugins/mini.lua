@@ -26,7 +26,6 @@ return { -- Collection of various small independent plugins/modules
         update_n_lines = 'gsn', -- Update `n_lines`
       },
     }
-    require('mini.diff').setup()
     require('mini.files').setup {
       mappings = {
         close = '-',
