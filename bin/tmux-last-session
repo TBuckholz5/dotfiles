@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+CURRENT="$(tmux display-message -p '#{session_name}')"
+TARGET="$(tmux list-sessions -F '#{session_last_attached} #{session_name}' \
+    | grep -v " scratch-" \
+    | grep -v " $CURRENT$" \
+    | sort -rn \
+    | awk 'NR==1{print $2}')"
+
+if [ -n "$TARGET" ]; then
+    tmux switch-client -t "$TARGET"
+fi
