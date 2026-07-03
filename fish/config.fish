@@ -3,6 +3,7 @@ set -g fish_greeting
 
 if status is-interactive
     fish_vi_key_bindings
+    set -g fish_escape_delay_ms 10
 end
 
 set -gx EDITOR nvim

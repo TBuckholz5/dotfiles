@@ -12,11 +12,6 @@ vim.keymap.set('n', '<Leader>dd', function()
   vim.diagnostic.open_float(0, { scope = 'line' })
 end, { desc = 'Open/Enter Diagnostic Float' })
 
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
 -- Terminal
 -- vim.keymap.set('n', '<leader>tt', '<C-w>w', { desc = '[T]oggle [T]erminal Focus' })
 -- vim.keymap.set('t', '<leader>tt', '<C-\\><C-N><C-w>w', { desc = '[T]oggle [T]erminal Focus' })
