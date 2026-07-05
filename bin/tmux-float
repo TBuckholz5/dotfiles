@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-WIN_IDX="$1"
+SESSION_NAME="$1"
 CALLER_DIR="$2"
-SESSION="scratch-$WIN_IDX"
+SCRATCH="scratch-$SESSION_NAME"
 CURRENT="$(tmux display-message -p '#{session_name}')"
 
 if [[ "$CURRENT" == scratch-* ]]; then
@@ -9,9 +9,9 @@ if [[ "$CURRENT" == scratch-* ]]; then
     exit 0
 fi
 
-if ! tmux has-session -t "$SESSION" 2>/dev/null; then
-    tmux new-session -d -s "$SESSION" -c "$CALLER_DIR"
-    tmux set-option -t "$SESSION" status off
+if ! tmux has-session -t "$SCRATCH" 2>/dev/null; then
+    tmux new-session -d -s "$SCRATCH" -c "$CALLER_DIR"
+    tmux set-option -t "$SCRATCH" status off
 fi
 
 tmux popup \
@@ -19,4 +19,4 @@ tmux popup \
     -h 75% \
     -b rounded \
     -d "#{pane_current_path}" \
-    -E "tmux attach-session -t '$SESSION'"
+    -E "tmux attach-session -t '$SCRATCH'"
