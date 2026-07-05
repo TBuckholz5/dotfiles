@@ -1,0 +1,7 @@
+[[session]]
+name = "chalk"
+path = "~/Development/chalk"
+
+[[session]]
+name = "chalk customer"
+path = "~/Development/chalk/customer"

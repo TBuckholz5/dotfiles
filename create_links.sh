@@ -96,6 +96,7 @@ for cask in "${BREW_CASKS[@]}"; do
 done
 
 link "$DOTFILES/.tmux.conf"      ~/.tmux.conf
+link "$DOTFILES/sesh/sesh.toml"  ~/.config/sesh/sesh.toml
 link "$DOTFILES/ghostty/config"  "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 link "$DOTFILES/nvim"            ~/.config/nvim
 link "$DOTFILES/.vimrc"          ~/.vimrc

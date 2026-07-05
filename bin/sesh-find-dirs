@@ -1,0 +1,29 @@
+#!/bin/bash
+# Directory list for sesh's fzf "find" mode (ctrl-f in the session switcher).
+# Lets you create a new session from any dir. Combines:
+#   1. Top-level dirs under $HOME (depth 2) — quick access to non-project dirs.
+#   2. Every git/jj repo root under ~/Development — most projects live here
+#      and sit deeper than a shallow scan reaches (e.g. chalk/customer/*).
+#   3. The container dirs between ~/Development and each repo (e.g.
+#      chalk/customer, chalk/customer/alloy) so you can jump to a parent too.
+# Many chalk repos are jj-only, so both .git and .jj are treated as markers.
+
+dev="$HOME/Development"
+
+{
+    fd -H -d 2 -t d -E .Trash . "$HOME" 2>/dev/null
+
+    if [ -d "$dev" ]; then
+        fd -H -t d '^\.(git|jj)$' "$dev" --max-depth 6 2>/dev/null \
+            | sed -E 's#/\.(git|jj)/?$##' \
+            | while IFS= read -r repo; do
+                echo "$repo"
+                # Walk up to (and including) ~/Development, emitting each container.
+                p=$(dirname "$repo")
+                while [ "$p" != "$dev" ] && [ "$p" != "$HOME" ] && [ "$p" != "/" ]; do
+                    echo "$p"
+                    p=$(dirname "$p")
+                done
+            done
+    fi
+} | sort -u
