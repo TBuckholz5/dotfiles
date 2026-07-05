@@ -3,15 +3,15 @@ return { -- You can easily change to a different colorscheme.
   -- change the command in the config to whatever the name of that colorscheme is.
   --
   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  'f4z3r/gruvbox-material.nvim',
+  'catppuccin/nvim',
   lazy = false,
   priority = 1000, -- Make sure to load this before all the other start plugins.
   config = function()
-    require('gruvbox-material').setup {
+    require('catppuccin').setup {
       contrast = 'hard',
     }
     vim.o.background = 'dark'
 
-    vim.cmd [[colorscheme gruvbox-material]]
+    vim.cmd [[colorscheme catppuccin-nvim]]
   end,
 }

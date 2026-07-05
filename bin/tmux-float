@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 WIN_IDX="$1"
 CALLER_DIR="$2"
-SESSION="scratch-$WIN_IDX"
 CURRENT="$(tmux display-message -p '#{session_name}')"
 
 if [[ "$CURRENT" == scratch-* ]]; then
     tmux detach-client
     exit 0
 fi
+
+# Unique per session AND window. Sanitize the session name (which may contain
+# spaces or characters like '.'/':' that are special in tmux targets) into a
+# safe slug so each session's window gets its own scratch.
+SLUG="$(printf '%s' "$CURRENT" | tr -C '[:alnum:]' '-')"
+SESSION="scratch-$SLUG-$WIN_IDX"
 
 if ! tmux has-session -t "$SESSION" 2>/dev/null; then
     tmux new-session -d -s "$SESSION" -c "$CALLER_DIR"
