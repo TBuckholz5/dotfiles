@@ -22,7 +22,7 @@ vim.opt.incsearch = true
 vim.opt.signcolumn = 'yes'
 vim.opt.isfname:append '@-@'
 
-vim.opt.colorcolumn = '80'
+vim.opt.colorcolumn = '120'
 vim.opt.conceallevel = 2
 
 -- Treesitter-based folding (Neovim native; falls back cleanly on buffers

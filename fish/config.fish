@@ -55,6 +55,36 @@ function lint_files
     pre-commit run --files $files
 end
 
+# pre-commit can't run in a jj workspace (no git dir), so format the jj-changed
+# Python files directly with the repo's pinned formatters. Picks the formatter
+# from the repo: ruff.toml present -> ruff (chalk-private), else isort+black
+# (chalk-public). Pass file args to override the jj-diff selection.
+function jjfmt --description 'Format jj-changed Python files with the repo pinned formatters'
+    set -l root (jj workspace root 2>/dev/null); or set root (pwd)
+    set -l files
+    if test (count $argv) -gt 0
+        set files $argv
+    else
+        for f in (jj diff --name-only 2>/dev/null)
+            if string match -qr '\.py$' -- $f; and test -f $root/$f
+                set -a files $root/$f
+            end
+        end
+    end
+    if test (count $files) -eq 0
+        echo "No changed Python files."
+        return 0
+    end
+
+    if test -f $root/ruff.toml
+        uvx ruff@0.11.3 check --config $root/ruff.toml --fix $files
+        uvx ruff@0.11.3 format --config $root/ruff.toml $files
+    else
+        uvx isort@5.12.0 --settings $root/pyproject.toml $files
+        uvx black@24.10.0 --config $root/pyproject.toml $files
+    end
+end
+
 function source_dev_env_chalk
     set -l env_file /Users/trent/Development/chalk/chalk-private/development.env
 
