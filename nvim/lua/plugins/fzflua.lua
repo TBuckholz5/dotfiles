@@ -49,5 +49,47 @@ return {
     { '<leader>fw', ':FzfLua grep_cword<CR>', desc = 'Search Current Word' },
     { '<leader>fk', ':FzfLua keymaps<CR>', desc = 'Search Keymaps' },
     { '<leader>fu', ':FzfLua undotree<CR>', desc = 'Search undotree' },
+    {
+      '<leader>js',
+      function()
+        local fzf = require 'fzf-lua'
+        local root = vim.trim(vim.fn.system 'jj root 2>/dev/null')
+        if root == '' then
+          vim.notify('Not in a jj repo', vim.log.levels.WARN)
+          return
+        end
+        local lines = vim.fn.systemlist 'jj status --no-pager 2>/dev/null'
+        local entries, paths = {}, {}
+        local status_hl = { M = 'DiagnosticWarn', A = 'DiagnosticOk', D = 'DiagnosticError', R = 'DiagnosticInfo' }
+        for _, line in ipairs(lines) do
+          local st, path = line:match '^([MADR]) (.+)$'
+          if st and path then
+            local display = path:match '{.+ => (.+)}' or path
+            local icon, icon_hl = MiniIcons.get('file', display)
+            local entry = fzf.utils.ansi_from_hl(status_hl[st] or 'Normal', st)
+              .. ' ' .. fzf.utils.ansi_from_hl(icon_hl, icon)
+              .. ' ' .. display
+            table.insert(entries, entry)
+            table.insert(paths, root .. '/' .. display)
+          end
+        end
+        if #entries == 0 then
+          vim.notify('No jj changes', vim.log.levels.INFO)
+          return
+        end
+        fzf.fzf_exec(entries, {
+          prompt = 'JJ Status> ',
+          actions = {
+            ['default'] = function(selected)
+              if not selected or #selected == 0 then return end
+              -- fzf strips ANSI; entry format is: "S icon path"
+              local path = selected[1]:match '^%S+ %S+ (.+)$'
+              if path then vim.cmd('edit ' .. vim.fn.fnameescape(root .. '/' .. path)) end
+            end,
+          },
+        })
+      end,
+      desc = 'JJ Status',
+    },
   },
 }

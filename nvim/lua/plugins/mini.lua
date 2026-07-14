@@ -62,6 +62,7 @@ return { -- Collection of various small independent plugins/modules
 
     local clue = require 'mini.clue'
     clue.setup {
+      window = { delay = 250 },
       triggers = {
         { mode = 'n', keys = '<Leader>' },
         { mode = 'x', keys = '<Leader>' },
