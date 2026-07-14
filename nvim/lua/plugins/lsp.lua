@@ -215,6 +215,25 @@ return {
       },
     })
 
+    -- chalk-lsp is installed manually (curl https://api.chalk.ai/lsp/install.sh | sh),
+    -- not via Mason, so the mason-lspconfig handler below won't start it. Register and
+    -- enable it directly. root_markers gate it to chalk projects so it coexists with pyright.
+    vim.lsp.config('chalk', {
+      cmd = { 'chalk-lsp', 'lsp' },
+      filetypes = { 'python' },
+      -- Only start chalk-lsp inside a chalk project. Using a root_dir callback (rather
+      -- than root_markers) means the server is not launched at all when no marker is
+      -- found, instead of falling back to a single-file root on every Python buffer.
+      root_dir = function(bufnr, on_dir)
+        local root = vim.fs.root(vim.api.nvim_buf_get_name(bufnr), { 'chalk.yaml', 'chalk.yml' })
+        if root then
+          on_dir(root)
+        end
+      end,
+      capabilities = capabilities,
+    })
+    vim.lsp.enable 'chalk'
+
     -- Enable the following language servers
     --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
     --
