@@ -48,7 +48,9 @@ return { -- Collection of various small independent plugins/modules
       },
       windows = {
         preview = true,
-        width_preview = 70,
+        width_focus = 30,
+        width_nofocus = 15,
+        width_preview = 40,
       },
     }
     vim.keymap.set('n', '-', function()
