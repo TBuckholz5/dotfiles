@@ -73,6 +73,7 @@ BREW_PACKAGES=(
 
 BREW_CASKS=(
     aerospace
+    vimr
 )
 
 echo "Installing brew packages..."
@@ -107,6 +108,7 @@ link "$DOTFILES/fish/fish_plugins" ~/.config/fish/fish_plugins
 link "$DOTFILES/zellij"          ~/.config/zellij
 link "$DOTFILES/bin/zellij-sessionizer" ~/.local/bin/zellij-sessionizer
 link "$DOTFILES/bin/zellij-file-finder" ~/.local/bin/zellij-file-finder
+link "$DOTFILES/tridactyl/tridactylrc" ~/.config/tridactyl/tridactylrc
 
 install_fish_plugins
 
