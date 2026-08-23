@@ -1,3 +1,6 @@
+# Starship init.
+starship init fish | source
+
 # Disable the default fish greeting for parity with zsh startup.
 set -g fish_greeting
 
@@ -114,50 +117,6 @@ function chalklocal
     ~/Development/chalk/cli/chalk $argv
 end
 
-function fish_vcs_prompt
-    if command -q jj
-        set -l jj_bookmarks (jj --ignore-working-copy --color never log -r '::@ & bookmarks()' -n 1 --no-graph -T 'if(self.bookmarks(), self.bookmarks(), "")' 2>/dev/null)
-        if test $status -eq 0
-            if test -n "$jj_bookmarks"
-                printf ' %s' $jj_bookmarks
-            else
-                set -l jj_change (jj --ignore-working-copy --color never log -r @ -n 1 --no-graph -T 'change_id.short()' 2>/dev/null)
-                if test $status -eq 0 -a -n "$jj_change"
-                    printf ' %s' $jj_change
-                end
-            end
-            return
-        end
-    end
-
-    if functions -q fish_git_prompt
-        printf '%s' (fish_git_prompt)
-    end
-end
-
-function fish_prompt
-    set -l last_status $status
-
-    if test $last_status -ne 0
-        set_color red
-        printf '[%s] ' $last_status
-    end
-
-    set_color cyan
-    printf '%s' (prompt_pwd)
-
-    set -l vcs_prompt (fish_vcs_prompt)
-    if test -n "$vcs_prompt"
-        set_color yellow
-        printf '%s' $vcs_prompt
-    end
-
-    set_color normal
-    printf '\n'
-    set_color green
-    printf '> '
-    set_color normal
-end
 
 if status is-interactive
     if command -q jj
