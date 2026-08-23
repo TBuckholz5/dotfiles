@@ -69,12 +69,24 @@ BREW_PACKAGES=(
     eza
     go
     buf
+    starship
+    dmmulroy/tap/jj-starship
+)
+
+BREW_TAPS=(
+    dmmulroy/tap
 )
 
 BREW_CASKS=(
     aerospace
     vimr
+    font-iosevka-nerd-font
 )
+
+echo "Adding brew taps..."
+for tap in "${BREW_TAPS[@]}"; do
+    brew tap "$tap"
+done
 
 echo "Installing brew packages..."
 for pkg in "${BREW_PACKAGES[@]}"; do
@@ -109,6 +121,10 @@ link "$DOTFILES/zellij"          ~/.config/zellij
 link "$DOTFILES/bin/zellij-sessionizer" ~/.local/bin/zellij-sessionizer
 link "$DOTFILES/bin/zellij-file-finder" ~/.local/bin/zellij-file-finder
 link "$DOTFILES/tridactyl/tridactylrc" ~/.config/tridactyl/tridactylrc
+link "$DOTFILES/starship.toml"       ~/.config/starship.toml
+
+echo "Generating starship nerd-font-symbols preset..."
+starship preset nerd-font-symbols -o ~/.config/starship.toml
 
 install_fish_plugins
 

@@ -48,6 +48,7 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 theme = "Catppuccin Mocha"
+font-family = "Iosevka Nerd Font Mono"
 command = /opt/homebrew/bin/fish --login --interactive
 macos-option-as-alt = true
 
