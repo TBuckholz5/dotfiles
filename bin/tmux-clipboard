@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Copy text to clipboard from tmux copy-pipe.
+# On macOS (outer tmux → Ghostty): uses pbcopy directly.
+# On Linux (inner Optiplex tmux → outer Mac tmux → Ghostty): tunnels OSC 52 through
+# two levels of tmux DCS passthrough so it reaches Ghostty without being absorbed
+# by either tmux layer's set-clipboard handling.
+b64=$(cat | base64 | tr -d '\n')
+if [ "$(uname)" = "Darwin" ]; then
+    printf '%s' "$b64" | base64 -d | pbcopy
+else
+    # Double DCS passthrough: inner Optiplex tmux un-doubles and emits single-wrapped
+    # DCS to outer Mac tmux, which un-doubles again and emits raw OSC 52 to Ghostty.
+    printf "\033Ptmux;\033\033Ptmux;\033\033\033\033]52;c;%s\007\033\033\\\033\\" "$b64" > /dev/tty
+fi
