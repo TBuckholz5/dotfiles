@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# Copy text to clipboard from tmux copy-pipe.
-# On macOS: uses pbcopy.
-# On Linux (inner Optiplex tmux → outer Mac tmux → Ghostty): tunnels OSC 52 through
-# two levels of tmux DCS passthrough. copy-pipe runs as a subprocess of the tmux
-# server (no /dev/tty), so we query tmux for the pane's actual PTY path.
+# Clipboard copy for both local Mac tmux and nested Optiplex tmux over SSH.
+# On macOS: pipes through pbcopy.
+# On Linux: loads into inner tmux paste buffer (so tmux ] and nvim "+p work),
+# then tunnels OSC 52 to Ghostty via double DCS passthrough through 2 tmux layers.
+# copy-pipe runs as a subprocess of the tmux server (no /dev/tty available),
+# so the pane PTY path is queried via tmux display-message.
 b64=$(cat | base64 | tr -d '\n')
 if [ "$(uname)" = "Darwin" ]; then
     printf '%s' "$b64" | base64 -d | pbcopy
 else
+    printf '%s' "$b64" | base64 -d | tmux load-buffer - 2>/dev/null
     pane_tty=$(tmux display-message -p '#{pane_tty}' 2>/dev/null)
     if [ -n "$pane_tty" ] && [ -w "$pane_tty" ]; then
-        # Double DCS passthrough: inner tmux un-doubles and emits single-wrapped
-        # DCS to outer Mac tmux, which un-doubles again and emits raw OSC 52 to Ghostty.
         printf '\033Ptmux;\033\033Ptmux;\033\033\033\033]52;c;%s\007\033\033\\\033\\' "$b64" > "$pane_tty"
     fi
 fi

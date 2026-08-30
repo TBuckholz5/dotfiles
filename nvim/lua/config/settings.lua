@@ -95,6 +95,24 @@ vim.opt.confirm = true
 
 vim.g.copilot_no_tab_map = true
 
+-- On Linux inside tmux (headless Optiplex), wire the + clipboard register to
+-- the tmux-clipboard script (double DCS passthrough → Mac clipboard) and use
+-- tmux show-buffer for paste (inner tmux buffer stays in sync with y copies).
+if vim.fn.has 'linux' == 1 and vim.fn.executable 'tmux' == 1 then
+  local home = os.getenv 'HOME'
+  vim.g.clipboard = {
+    name = 'tmux-clipboard',
+    copy = {
+      ['+'] = { home .. '/dotfiles/bin/tmux-clipboard' },
+      ['*'] = { home .. '/dotfiles/bin/tmux-clipboard' },
+    },
+    paste = {
+      ['+'] = { 'tmux', 'show-buffer' },
+      ['*'] = { 'tmux', 'show-buffer' },
+    },
+  }
+end
+
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
