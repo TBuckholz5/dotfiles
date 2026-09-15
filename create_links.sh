@@ -126,6 +126,11 @@ link "$DOTFILES/starship.toml"       ~/.config/starship.toml
 echo "Generating starship nerd-font-symbols preset..."
 starship preset nerd-font-symbols -o ~/.config/starship.toml
 
+
+# Coder workspace only: $HOME outside a mounted volume is discarded on rebuild.
+# The volume carries its own relink script so this stays a no-op elsewhere.
+[ -x "$HOME/workspace/persist/relink.sh" ] && "$HOME/workspace/persist/relink.sh" || true
+
 install_fish_plugins
 
 echo "Done."
